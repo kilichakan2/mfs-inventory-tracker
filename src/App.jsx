@@ -118,6 +118,17 @@ const parseProductBarcode = (barcode) => {
   }
 };
 
+// Brand Colors
+const COLORS = {
+  navyBlue: '#16205B',
+  maroon: '#590129',
+  orange: '#EB6619',
+  red: '#FF3300',
+  sand: '#C0946F',
+  softNeutral: '#EDEAE1',
+  black: '#1E1E1E',
+};
+
 // Notification Component
 const Notification = ({ message, type, onClose }) => {
   useEffect(() => {
@@ -125,10 +136,10 @@ const Notification = ({ message, type, onClose }) => {
     return () => clearTimeout(timer);
   }, [onClose]);
   
+  const bgColor = type === 'error' ? 'bg-[#FF3300]' : type === 'warning' ? 'bg-[#C0946F]' : 'bg-[#EB6619]';
+  
   return (
-    <div className={`fixed top-4 right-4 px-4 py-3 rounded-lg shadow-lg z-50 ${
-      type === 'error' ? 'bg-red-600' : type === 'warning' ? 'bg-amber-600' : 'bg-emerald-600'
-    } text-white`}>
+    <div className={`fixed top-4 right-4 px-4 py-3 rounded-lg shadow-lg z-50 ${bgColor} text-white`}>
       {message}
     </div>
   );
@@ -140,7 +151,7 @@ const OnlineStatus = ({ isOnline, queueCount }) => {
   
   return (
     <div className={`fixed bottom-4 left-4 px-3 py-2 rounded-lg text-sm font-medium z-40 ${
-      isOnline ? 'bg-amber-600' : 'bg-red-600'
+      isOnline ? 'bg-[#C0946F]' : 'bg-[#FF3300]'
     } text-white`}>
       {isOnline ? `⏳ Syncing ${queueCount} items...` : `📴 Offline - ${queueCount} queued`}
     </div>
@@ -183,42 +194,42 @@ const LoginScreen = ({ onLogin, showNotification }) => {
   };
   
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#16205B] flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-emerald-400 mb-2">MFS Inventory Tracker</h1>
-          <p className="text-slate-400">Process Room Scanning System</p>
+          <h1 className="text-2xl font-bold text-[#EB6619] mb-2">MFS Inventory Tracker</h1>
+          <p className="text-[#EDEAE1]/70">Process Room Scanning System</p>
         </div>
         
-        <form onSubmit={handleLogin} className="bg-slate-800 rounded-xl p-6 space-y-4">
+        <form onSubmit={handleLogin} className="bg-[#1E1E1E] rounded-xl p-6 space-y-4">
           <div>
-            <label className="block text-sm text-slate-400 mb-2">Username</label>
+            <label className="block text-sm text-[#EDEAE1]/70 mb-2">Username</label>
             <input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter username"
-              className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white focus:border-emerald-500 focus:outline-none"
+              className="w-full bg-[#16205B] border border-[#16205B] rounded-lg px-4 py-3 text-white focus:border-[#EB6619] focus:outline-none"
               autoCapitalize="none"
               autoCorrect="off"
             />
           </div>
           
           <div>
-            <label className="block text-sm text-slate-400 mb-2">Password</label>
+            <label className="block text-sm text-[#EDEAE1]/70 mb-2">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter password"
-              className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-white focus:border-emerald-500 focus:outline-none"
+              className="w-full bg-[#16205B] border border-[#16205B] rounded-lg px-4 py-3 text-white focus:border-[#EB6619] focus:outline-none"
             />
           </div>
           
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-600 py-4 rounded-xl font-semibold transition-colors"
+            className="w-full bg-[#EB6619] hover:bg-[#EB6619]/90 disabled:bg-[#1E1E1E] py-4 rounded-xl font-semibold transition-colors text-white"
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
@@ -230,71 +241,71 @@ const LoginScreen = ({ onLogin, showNotification }) => {
 
 // Main Menu Component
 const MainMenu = ({ onNavigate, user, onLogout }) => (
-  <div className="min-h-screen bg-slate-900">
-    <div className="bg-slate-800 border-b border-slate-700 px-4 py-4">
+  <div className="min-h-screen bg-[#16205B]">
+    <div className="bg-[#1E1E1E] border-b border-[#1E1E1E] px-4 py-4">
       <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-xl font-bold text-emerald-400">MFS Inventory Tracker</h1>
-          <p className="text-slate-400 text-sm">Process Room Scanning System</p>
+          <h1 className="text-xl font-bold text-[#EB6619]">MFS Inventory Tracker</h1>
+          <p className="text-[#EDEAE1]/70 text-sm">Process Room Scanning System</p>
         </div>
         <div className="text-right">
-          <p className="text-sm text-slate-400">Logged in as</p>
-          <p className="text-emerald-400 font-medium">{user.username}</p>
+          <p className="text-sm text-[#EDEAE1]/70">Logged in as</p>
+          <p className="text-[#EB6619] font-medium">{user.username}</p>
         </div>
       </div>
     </div>
     <div className="p-4 space-y-3">
       <button
         onClick={() => onNavigate('lamb')}
-        className="w-full bg-slate-800 hover:bg-slate-700 rounded-xl p-5 flex items-center gap-4 transition-colors"
+        className="w-full bg-[#1E1E1E] hover:bg-[#1E1E1E]/80 rounded-xl p-5 flex items-center gap-4 transition-colors"
       >
         <span className="text-4xl">🐑</span>
         <div className="text-left">
           <h3 className="text-lg font-semibold text-white">Lamb Inventory</h3>
-          <p className="text-sm text-slate-400">Track lamb carcasses and products</p>
+          <p className="text-sm text-[#EDEAE1]/70">Track lamb carcasses and products</p>
         </div>
       </button>
       
       <button
         disabled
-        className="w-full bg-slate-800/50 rounded-xl p-5 flex items-center gap-4 opacity-50 cursor-not-allowed"
+        className="w-full bg-[#1E1E1E]/50 rounded-xl p-5 flex items-center gap-4 opacity-50 cursor-not-allowed"
       >
         <span className="text-4xl">🐄</span>
         <div className="text-left flex-1">
           <h3 className="text-lg font-semibold text-white">Beef Inventory</h3>
-          <p className="text-sm text-slate-400">Track beef carcasses and products</p>
+          <p className="text-sm text-[#EDEAE1]/70">Track beef carcasses and products</p>
         </div>
-        <span className="text-xs bg-slate-700 text-slate-400 px-2 py-1 rounded">Coming Soon</span>
+        <span className="text-xs bg-[#C0946F] text-white px-2 py-1 rounded">Coming Soon</span>
       </button>
       
       <button
         disabled
-        className="w-full bg-slate-800/50 rounded-xl p-5 flex items-center gap-4 opacity-50 cursor-not-allowed"
+        className="w-full bg-[#1E1E1E]/50 rounded-xl p-5 flex items-center gap-4 opacity-50 cursor-not-allowed"
       >
         <span className="text-4xl">🐔</span>
         <div className="text-left flex-1">
           <h3 className="text-lg font-semibold text-white">Poultry Inventory</h3>
-          <p className="text-sm text-slate-400">Track poultry and products</p>
+          <p className="text-sm text-[#EDEAE1]/70">Track poultry and products</p>
         </div>
-        <span className="text-xs bg-slate-700 text-slate-400 px-2 py-1 rounded">Coming Soon</span>
+        <span className="text-xs bg-[#C0946F] text-white px-2 py-1 rounded">Coming Soon</span>
       </button>
       
       {user.role === 'admin' && (
         <button
           onClick={() => onNavigate('admin')}
-          className="w-full bg-slate-800 hover:bg-slate-700 rounded-xl p-5 flex items-center gap-4 transition-colors"
+          className="w-full bg-[#1E1E1E] hover:bg-[#1E1E1E]/80 rounded-xl p-5 flex items-center gap-4 transition-colors"
         >
           <span className="text-4xl">⚙️</span>
           <div className="text-left">
             <h3 className="text-lg font-semibold text-white">Admin / Reports</h3>
-            <p className="text-sm text-slate-400">View reports, manage PLU list</p>
+            <p className="text-sm text-[#EDEAE1]/70">View reports, manage PLU list</p>
           </div>
         </button>
       )}
       
       <button
         onClick={onLogout}
-        className="w-full bg-slate-800 hover:bg-red-900/50 rounded-xl p-4 flex items-center justify-center gap-2 transition-colors text-slate-400 hover:text-red-400"
+        className="w-full bg-[#1E1E1E] hover:bg-[#FF3300]/20 rounded-xl p-4 flex items-center justify-center gap-2 transition-colors text-[#EDEAE1]/70 hover:text-[#FF3300]"
       >
         <span>🚪</span>
         <span>Logout</span>
@@ -318,15 +329,15 @@ const Numpad = ({ value, onChange }) => {
   const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'delete'];
   
   return (
-    <div className="grid grid-cols-3 gap-2 p-4 bg-slate-800 rounded-xl">
+    <div className="grid grid-cols-3 gap-2 p-4 bg-[#1E1E1E] rounded-xl">
       {keys.map((key) => (
         <button
           key={key}
           onClick={() => handlePress(key)}
           className={`p-4 text-xl font-semibold rounded-lg transition-colors ${
             key === 'delete' 
-              ? 'bg-red-600 hover:bg-red-700 text-white' 
-              : 'bg-slate-700 hover:bg-slate-600 text-white'
+              ? 'bg-[#FF3300] hover:bg-[#FF3300]/80 text-white' 
+              : 'bg-[#16205B] hover:bg-[#16205B]/80 text-white'
           }`}
         >
           {key === 'delete' ? '⌫' : key}
@@ -576,25 +587,25 @@ const ProductModule = ({ productType, productEmoji, onBack, pluList, showNotific
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-[#16205B] flex items-center justify-center">
         <div className="text-white text-xl">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white pb-20">
+    <div className="min-h-screen bg-[#16205B] text-white pb-20">
       {/* Header */}
-      <div className="bg-slate-800 border-b border-slate-700 px-4 py-3">
-        <button onClick={onBack} className="text-slate-400 text-sm mb-2 flex items-center gap-1">
+      <div className="bg-[#1E1E1E] border-b border-[#1E1E1E] px-4 py-3">
+        <button onClick={onBack} className="text-[#EDEAE1]/70 text-sm mb-2 flex items-center gap-1">
           ← Back to Menu
         </button>
         <div className="flex justify-between items-center">
-          <h1 className="text-xl font-bold text-emerald-400">{productEmoji} {productType.charAt(0).toUpperCase() + productType.slice(1)} Inventory</h1>
+          <h1 className="text-xl font-bold text-[#EB6619]">{productEmoji} {productType.charAt(0).toUpperCase() + productType.slice(1)} Inventory</h1>
           {lastEntry && (
             <button
               onClick={undoLastEntry}
-              className="bg-amber-600 hover:bg-amber-700 px-3 py-1 rounded-lg text-sm font-medium flex items-center gap-1"
+              className="bg-[#C0946F] hover:bg-[#C0946F]/80 px-3 py-1 rounded-lg text-sm font-medium flex items-center gap-1"
             >
               ↩️ Undo
             </button>
@@ -603,11 +614,11 @@ const ProductModule = ({ productType, productEmoji, onBack, pluList, showNotific
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-slate-700">
+      <div className="flex border-b border-[#1E1E1E]">
         <button
           onClick={() => setActiveTab('goodsIn')}
           className={`flex-1 py-3 px-4 text-center font-medium transition-colors ${
-            activeTab === 'goodsIn' ? 'bg-emerald-600 text-white' : 'bg-slate-800 text-slate-400'
+            activeTab === 'goodsIn' ? 'bg-[#EB6619] text-white' : 'bg-[#1E1E1E] text-[#EDEAE1]/70'
           }`}
         >
           📥 Goods In
@@ -615,7 +626,7 @@ const ProductModule = ({ productType, productEmoji, onBack, pluList, showNotific
         <button
           onClick={() => setActiveTab('goodsProduced')}
           className={`flex-1 py-3 px-4 text-center font-medium transition-colors ${
-            activeTab === 'goodsProduced' ? 'bg-blue-600 text-white' : 'bg-slate-800 text-slate-400'
+            activeTab === 'goodsProduced' ? 'bg-[#590129] text-white' : 'bg-[#1E1E1E] text-[#EDEAE1]/70'
           }`}
         >
           📦 Goods Produced
@@ -625,62 +636,62 @@ const ProductModule = ({ productType, productEmoji, onBack, pluList, showNotific
       {/* Goods In Tab */}
       {activeTab === 'goodsIn' && (
         <div className="p-4 space-y-4">
-          <div className="bg-emerald-900/30 border border-emerald-700 rounded-xl p-4">
-            <div className="text-emerald-400 text-sm font-medium mb-2">Today's Intake</div>
+          <div className="bg-[#EB6619]/20 border border-[#EB6619] rounded-xl p-4">
+            <div className="text-[#EB6619] text-sm font-medium mb-2">Today's Intake</div>
             <div className="flex gap-8">
               <div>
                 <span className="text-3xl font-bold">{goodsIn.length}</span>
-                <span className="text-slate-400 ml-2">carcasses</span>
+                <span className="text-[#EDEAE1]/70 ml-2">carcasses</span>
               </div>
               <div>
                 <span className="text-3xl font-bold">{goodsInTotal.toFixed(1)}</span>
-                <span className="text-slate-400 ml-2">kg</span>
+                <span className="text-[#EDEAE1]/70 ml-2">kg</span>
               </div>
             </div>
           </div>
 
-          <div className="bg-slate-800 rounded-xl p-4 space-y-3">
+          <div className="bg-[#1E1E1E] rounded-xl p-4 space-y-3">
             <div>
-              <label className="block text-sm text-slate-400 mb-2">Scan Carcass Barcode</label>
+              <label className="block text-sm text-[#EDEAE1]/70 mb-2">Scan Carcass Barcode</label>
               <input
                 ref={carcassInputRef}
                 type="text"
                 value={carcassBarcode}
                 onChange={(e) => handleCarcassBarcodeChange(e.target.value)}
                 placeholder="Scan or enter barcode..."
-                className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-lg focus:border-emerald-500 focus:outline-none"
+                className="w-full bg-[#16205B] border border-[#16205B] rounded-lg px-4 py-3 text-lg focus:border-[#EB6619] focus:outline-none"
                 autoFocus
               />
             </div>
 
             {parsedCarcass && (
-              <div className="bg-slate-700/50 rounded-lg p-3 grid grid-cols-2 gap-3">
+              <div className="bg-[#16205B]/50 rounded-lg p-3 grid grid-cols-2 gap-3">
                 <div className="text-sm">
-                  <span className="text-slate-400">Kill Date: </span>
-                  <span className="text-emerald-400 font-medium">{parsedCarcass.killDateDisplay}</span>
+                  <span className="text-[#EDEAE1]/70">Kill Date: </span>
+                  <span className="text-[#EB6619] font-medium">{parsedCarcass.killDateDisplay}</span>
                 </div>
                 <div className="text-sm">
-                  <span className="text-slate-400">Kill Number: </span>
-                  <span className="text-emerald-400 font-medium">{parsedCarcass.killNumber}</span>
+                  <span className="text-[#EDEAE1]/70">Kill Number: </span>
+                  <span className="text-[#EB6619] font-medium">{parsedCarcass.killNumber}</span>
                 </div>
               </div>
             )}
 
             {carcassBarcode && !parsedCarcass && carcassBarcode.length >= 10 && (
-              <div className="bg-red-900/30 border border-red-700 rounded-lg p-3 text-red-400 text-sm">
+              <div className="bg-[#FF3300]/20 border border-[#FF3300] rounded-lg p-3 text-[#FF3300] text-sm">
                 ⚠️ Could not parse barcode - check format
               </div>
             )}
 
             <div>
-              <label className="block text-sm text-slate-400 mb-2">Weight (kg)</label>
+              <label className="block text-sm text-[#EDEAE1]/70 mb-2">Weight (kg)</label>
               <input
                 type="text"
                 value={carcassWeight}
                 onChange={(e) => setCarcassWeight(e.target.value)}
                 onFocus={() => setShowNumpad(true)}
                 placeholder="Enter weight..."
-                className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-lg focus:border-emerald-500 focus:outline-none"
+                className="w-full bg-[#16205B] border border-[#16205B] rounded-lg px-4 py-3 text-lg focus:border-[#EB6619] focus:outline-none"
                 readOnly
               />
             </div>
@@ -692,31 +703,31 @@ const ProductModule = ({ productType, productEmoji, onBack, pluList, showNotific
             <button
               onClick={saveGoodsIn}
               disabled={!parsedCarcass || !carcassWeight}
-              className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-slate-600 disabled:cursor-not-allowed py-4 rounded-xl font-semibold transition-colors"
+              className="w-full bg-[#EB6619] hover:bg-[#EB6619]/90 disabled:bg-[#1E1E1E] disabled:cursor-not-allowed py-4 rounded-xl font-semibold transition-colors"
             >
               + Add Carcass
             </button>
           </div>
 
           <div>
-            <h3 className="text-slate-400 text-sm font-medium mb-2">Today's Entries</h3>
+            <h3 className="text-[#EDEAE1]/70 text-sm font-medium mb-2">Today's Entries</h3>
             <div className="space-y-2">
               {goodsIn.slice(0, 10).map(item => (
-                <div key={item.id} className={`bg-slate-800 rounded-lg p-3 flex justify-between items-center ${item.id.toString().startsWith('offline_') ? 'border border-amber-600/50' : ''}`}>
+                <div key={item.id} className={`bg-[#1E1E1E] rounded-lg p-3 flex justify-between items-center ${item.id.toString().startsWith('offline_') ? 'border border-[#C0946F]' : ''}`}>
                   <div>
                     <div className="font-medium">
                       Kill #{item.kill_number}
-                      {item.id.toString().startsWith('offline_') && <span className="ml-2 text-xs text-amber-400">⏳ Pending sync</span>}
+                      {item.id.toString().startsWith('offline_') && <span className="ml-2 text-xs text-[#C0946F]">⏳ Pending sync</span>}
                     </div>
-                    <div className="text-sm text-slate-400">
+                    <div className="text-sm text-[#EDEAE1]/70">
                       {formatDate(item.kill_date)} • {item.weight_kg}kg • {formatTime(item.scanned_at)}
                     </div>
                   </div>
-                  <button onClick={() => deleteGoodsIn(item.id)} className="text-red-400 hover:text-red-300 p-2">✕</button>
+                  <button onClick={() => deleteGoodsIn(item.id)} className="text-[#FF3300] hover:text-[#FF3300]/80 p-2">✕</button>
                 </div>
               ))}
               {goodsIn.length === 0 && (
-                <div className="text-slate-500 text-center py-8">No entries yet today</div>
+                <div className="text-[#EDEAE1]/50 text-center py-8">No entries yet today</div>
               )}
             </div>
           </div>
@@ -726,83 +737,83 @@ const ProductModule = ({ productType, productEmoji, onBack, pluList, showNotific
       {/* Goods Produced Tab */}
       {activeTab === 'goodsProduced' && (
         <div className="p-4 space-y-4">
-          <div className="bg-blue-900/30 border border-blue-700 rounded-xl p-4">
-            <div className="text-blue-400 text-sm font-medium mb-2">Today's Production</div>
+          <div className="bg-[#590129]/30 border border-[#590129] rounded-xl p-4">
+            <div className="text-[#EDEAE1] text-sm font-medium mb-2">Today's Production</div>
             <div className="flex gap-8">
               <div>
                 <span className="text-3xl font-bold">{goodsProduced.length}</span>
-                <span className="text-slate-400 ml-2">items</span>
+                <span className="text-[#EDEAE1]/70 ml-2">items</span>
               </div>
               <div>
                 <span className="text-3xl font-bold">{goodsProducedTotal.toFixed(1)}</span>
-                <span className="text-slate-400 ml-2">kg</span>
+                <span className="text-[#EDEAE1]/70 ml-2">kg</span>
               </div>
             </div>
           </div>
 
-          <div className="bg-slate-800 rounded-xl p-4 space-y-3">
+          <div className="bg-[#1E1E1E] rounded-xl p-4 space-y-3">
             <div>
-              <label className="block text-sm text-slate-400 mb-2">Scan Product Barcode (EAN-13)</label>
+              <label className="block text-sm text-[#EDEAE1]/70 mb-2">Scan Product Barcode (EAN-13)</label>
               <input
                 ref={productInputRef}
                 type="text"
                 value={productBarcode}
                 onChange={(e) => handleProductBarcodeChange(e.target.value)}
                 placeholder="Scan product label..."
-                className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-3 text-lg focus:border-blue-500 focus:outline-none"
+                className="w-full bg-[#16205B] border border-[#16205B] rounded-lg px-4 py-3 text-lg focus:border-[#590129] focus:outline-none"
                 autoFocus
               />
             </div>
 
             {parsedProduct && (
-              <div className="bg-slate-700/50 rounded-lg p-3 space-y-2">
+              <div className="bg-[#16205B]/50 rounded-lg p-3 space-y-2">
                 <div className="grid grid-cols-2 gap-3">
                   <div className="text-sm">
-                    <span className="text-slate-400">PLU: </span>
-                    <span className="text-blue-400 font-medium">{parsedProduct.plu}</span>
+                    <span className="text-[#EDEAE1]/70">PLU: </span>
+                    <span className="text-[#EDEAE1] font-medium">{parsedProduct.plu}</span>
                   </div>
                   <div className="text-sm">
-                    <span className="text-slate-400">Weight: </span>
-                    <span className="text-blue-400 font-medium">{parsedProduct.weight.toFixed(3)} kg</span>
+                    <span className="text-[#EDEAE1]/70">Weight: </span>
+                    <span className="text-[#EDEAE1] font-medium">{parsedProduct.weight.toFixed(3)} kg</span>
                   </div>
                 </div>
                 <div className="text-sm">
-                  <span className="text-slate-400">Product: </span>
-                  <span className="text-blue-400 font-medium">{parsedProduct.productName}</span>
+                  <span className="text-[#EDEAE1]/70">Product: </span>
+                  <span className="text-[#EDEAE1] font-medium">{parsedProduct.productName}</span>
                 </div>
               </div>
             )}
 
             {productBarcode && !parsedProduct && productBarcode.length >= 10 && (
-              <div className="bg-red-900/30 border border-red-700 rounded-lg p-3 text-red-400 text-sm">
+              <div className="bg-[#FF3300]/20 border border-[#FF3300] rounded-lg p-3 text-[#FF3300] text-sm">
                 ⚠️ Could not parse barcode - ensure Avery Berkel is set to Format 14
               </div>
             )}
 
-            <div className="bg-blue-600 py-4 rounded-xl font-semibold text-center">
+            <div className="bg-[#590129] py-4 rounded-xl font-semibold text-center">
               ✓ Auto-saves on scan — Ready for next item
             </div>
           </div>
 
           <div>
-            <h3 className="text-slate-400 text-sm font-medium mb-2">Today's Entries</h3>
+            <h3 className="text-[#EDEAE1]/70 text-sm font-medium mb-2">Today's Entries</h3>
             <div className="space-y-2">
               {goodsProduced.slice(0, 10).map(item => (
-                <div key={item.id} className={`bg-slate-800 rounded-lg p-3 flex justify-between items-center ${item.id.toString().startsWith('offline_') ? 'border border-amber-600/50' : ''}`}>
+                <div key={item.id} className={`bg-[#1E1E1E] rounded-lg p-3 flex justify-between items-center ${item.id.toString().startsWith('offline_') ? 'border border-[#C0946F]' : ''}`}>
                   <div>
                     <div className="font-medium">
                       {item.product_name}
-                      {item.id.toString().startsWith('offline_') && <span className="ml-2 text-xs text-amber-400">⏳ Pending sync</span>}
+                      {item.id.toString().startsWith('offline_') && <span className="ml-2 text-xs text-[#C0946F]">⏳ Pending sync</span>}
                     </div>
-                    <div className="text-sm text-slate-400">
+                    <div className="text-sm text-[#EDEAE1]/70">
                       {parseFloat(item.weight_kg).toFixed(3)}kg • PLU {item.plu} • {formatTime(item.scanned_at)}
                     </div>
                   </div>
-                  <button onClick={() => deleteGoodsProduced(item.id)} className="text-red-400 hover:text-red-300 p-2">✕</button>
+                  <button onClick={() => deleteGoodsProduced(item.id)} className="text-[#FF3300] hover:text-[#FF3300]/80 p-2">✕</button>
                 </div>
               ))}
               {goodsProduced.length === 0 && (
-                <div className="text-slate-500 text-center py-8">No entries yet today</div>
+                <div className="text-[#EDEAE1]/50 text-center py-8">No entries yet today</div>
               )}
             </div>
           </div>
@@ -1066,19 +1077,19 @@ const AdminDashboard = ({ onBack, pluList, setPluList, showNotification }) => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white">
-      <div className="bg-slate-800 border-b border-slate-700 px-4 py-3">
-        <button onClick={onBack} className="text-slate-400 text-sm mb-2 flex items-center gap-1">
+    <div className="min-h-screen bg-[#16205B] text-white">
+      <div className="bg-[#1E1E1E] border-b border-[#1E1E1E] px-4 py-3">
+        <button onClick={onBack} className="text-[#EDEAE1]/70 text-sm mb-2 flex items-center gap-1">
           ← Back to Menu
         </button>
-        <h1 className="text-xl font-bold text-emerald-400">⚙️ Admin / Reports</h1>
+        <h1 className="text-xl font-bold text-[#EB6619]">⚙️ Admin / Reports</h1>
       </div>
 
-      <div className="flex border-b border-slate-700">
+      <div className="flex border-b border-[#1E1E1E]">
         <button
           onClick={() => setActiveSection('reports')}
           className={`flex-1 py-3 px-4 text-center font-medium transition-colors ${
-            activeSection === 'reports' ? 'bg-purple-600 text-white' : 'bg-slate-800 text-slate-400'
+            activeSection === 'reports' ? 'bg-[#C0946F] text-white' : 'bg-[#1E1E1E] text-[#EDEAE1]/70'
           }`}
         >
           📊 Reports
@@ -1086,7 +1097,7 @@ const AdminDashboard = ({ onBack, pluList, setPluList, showNotification }) => {
         <button
           onClick={() => setActiveSection('plu')}
           className={`flex-1 py-3 px-4 text-center font-medium transition-colors ${
-            activeSection === 'plu' ? 'bg-purple-600 text-white' : 'bg-slate-800 text-slate-400'
+            activeSection === 'plu' ? 'bg-[#C0946F] text-white' : 'bg-[#1E1E1E] text-[#EDEAE1]/70'
           }`}
         >
           📋 PLU
@@ -1094,7 +1105,7 @@ const AdminDashboard = ({ onBack, pluList, setPluList, showNotification }) => {
         <button
           onClick={() => setActiveSection('users')}
           className={`flex-1 py-3 px-4 text-center font-medium transition-colors ${
-            activeSection === 'users' ? 'bg-purple-600 text-white' : 'bg-slate-800 text-slate-400'
+            activeSection === 'users' ? 'bg-[#C0946F] text-white' : 'bg-[#1E1E1E] text-[#EDEAE1]/70'
           }`}
         >
           👥 Users
@@ -1105,29 +1116,29 @@ const AdminDashboard = ({ onBack, pluList, setPluList, showNotification }) => {
       {activeSection === 'reports' && (
         <div className="p-4 space-y-4">
           <div className="grid grid-cols-3 gap-3">
-            <div className="bg-emerald-900/30 border border-emerald-700 rounded-xl p-4 text-center">
-              <div className="text-2xl font-bold text-emerald-400">{goodsIn.length}</div>
-              <div className="text-xs text-slate-400">Carcasses In</div>
-              <div className="text-sm text-emerald-400">{goodsInTotal.toFixed(1)} kg</div>
+            <div className="bg-[#EB6619]/20 border border-[#EB6619] rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-[#EB6619]">{goodsIn.length}</div>
+              <div className="text-xs text-[#EDEAE1]/70">Carcasses In</div>
+              <div className="text-sm text-[#EB6619]">{goodsInTotal.toFixed(1)} kg</div>
             </div>
-            <div className="bg-blue-900/30 border border-blue-700 rounded-xl p-4 text-center">
-              <div className="text-2xl font-bold text-blue-400">{goodsProduced.length}</div>
-              <div className="text-xs text-slate-400">Products Out</div>
-              <div className="text-sm text-blue-400">{goodsProducedTotal.toFixed(1)} kg</div>
+            <div className="bg-[#590129]/30 border border-[#590129] rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-[#EDEAE1]">{goodsProduced.length}</div>
+              <div className="text-xs text-[#EDEAE1]/70">Products Out</div>
+              <div className="text-sm text-[#EDEAE1]">{goodsProducedTotal.toFixed(1)} kg</div>
             </div>
-            <div className="bg-purple-900/30 border border-purple-700 rounded-xl p-4 text-center">
-              <div className="text-2xl font-bold text-purple-400">{yieldPercent}%</div>
-              <div className="text-xs text-slate-400">Yield</div>
+            <div className="bg-[#C0946F]/20 border border-[#C0946F] rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-[#C0946F]">{yieldPercent}%</div>
+              <div className="text-xs text-[#EDEAE1]/70">Yield</div>
             </div>
           </div>
 
-          <div className="bg-slate-800 rounded-xl p-4 space-y-3">
-            <h3 className="text-sm font-medium text-slate-400">Filters</h3>
+          <div className="bg-[#1E1E1E] rounded-xl p-4 space-y-3">
+            <h3 className="text-sm font-medium text-[#EDEAE1]/70">Filters</h3>
             <div className="grid grid-cols-2 gap-3">
               <select
                 value={productFilter}
                 onChange={(e) => setProductFilter(e.target.value)}
-                className="bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-sm"
+                className="bg-[#16205B] border border-[#16205B] rounded-lg px-3 py-2 text-sm"
               >
                 <option value="all">All Products</option>
                 <option value="lamb">🐑 Lamb</option>
@@ -1137,7 +1148,7 @@ const AdminDashboard = ({ onBack, pluList, setPluList, showNotification }) => {
               <select
                 value={dateFilter}
                 onChange={(e) => setDateFilter(e.target.value)}
-                className="bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-sm"
+                className="bg-[#16205B] border border-[#16205B] rounded-lg px-3 py-2 text-sm"
               >
                 <option value="today">Today</option>
                 <option value="yesterday">Yesterday</option>
@@ -1153,37 +1164,37 @@ const AdminDashboard = ({ onBack, pluList, setPluList, showNotification }) => {
                   type="date"
                   value={customDateFrom}
                   onChange={(e) => setCustomDateFrom(e.target.value)}
-                  className="bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-sm"
+                  className="bg-[#16205B] border border-[#16205B] rounded-lg px-3 py-2 text-sm"
                 />
                 <input
                   type="date"
                   value={customDateTo}
                   onChange={(e) => setCustomDateTo(e.target.value)}
-                  className="bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 text-sm"
+                  className="bg-[#16205B] border border-[#16205B] rounded-lg px-3 py-2 text-sm"
                 />
               </div>
             )}
             
             <div className="flex gap-2">
-              <button onClick={exportGoodsIn} className="flex-1 bg-emerald-600 hover:bg-emerald-700 py-2 rounded-lg text-sm font-medium">
+              <button onClick={exportGoodsIn} className="flex-1 bg-[#EB6619] hover:bg-[#EB6619]/90 py-2 rounded-lg text-sm font-medium">
                 Export Goods In
               </button>
-              <button onClick={exportGoodsProduced} className="flex-1 bg-blue-600 hover:bg-blue-700 py-2 rounded-lg text-sm font-medium">
+              <button onClick={exportGoodsProduced} className="flex-1 bg-[#590129] hover:bg-[#590129]/90 py-2 rounded-lg text-sm font-medium">
                 Export Goods Out
               </button>
             </div>
           </div>
 
           {loading ? (
-            <div className="text-center py-8 text-slate-400">Loading...</div>
+            <div className="text-center py-8 text-[#EDEAE1]/70">Loading...</div>
           ) : (
             <>
-              <div className="bg-slate-800 rounded-xl p-4">
-                <h3 className="text-emerald-400 font-medium mb-3">📥 Goods In ({goodsIn.length})</h3>
+              <div className="bg-[#1E1E1E] rounded-xl p-4">
+                <h3 className="text-[#EB6619] font-medium mb-3">📥 Goods In ({goodsIn.length})</h3>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="text-slate-400 text-left border-b border-slate-700">
+                      <tr className="text-[#EDEAE1]/70 text-left border-b border-[#16205B]">
                         <th className="pb-2">Date/Time</th>
                         <th className="pb-2">Kill #</th>
                         <th className="pb-2">Weight</th>
@@ -1192,27 +1203,27 @@ const AdminDashboard = ({ onBack, pluList, setPluList, showNotification }) => {
                     </thead>
                     <tbody>
                       {goodsIn.slice(0, 20).map(item => (
-                        <tr key={item.id} className="border-b border-slate-700/50">
+                        <tr key={item.id} className="border-b border-[#16205B]/50">
                           <td className="py-2">{formatDateTime(item.scanned_at)}</td>
                           <td className="py-2">{item.kill_number}</td>
                           <td className="py-2">{item.weight_kg} kg</td>
-                          <td className="py-2 text-slate-400">{item.scanned_by || '-'}</td>
+                          <td className="py-2 text-[#EDEAE1]/70">{item.scanned_by || '-'}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                   {goodsIn.length === 0 && (
-                    <div className="text-center py-4 text-slate-500">No data for selected period</div>
+                    <div className="text-center py-4 text-[#EDEAE1]/50">No data for selected period</div>
                   )}
                 </div>
               </div>
 
-              <div className="bg-slate-800 rounded-xl p-4">
-                <h3 className="text-blue-400 font-medium mb-3">📦 Goods Produced ({goodsProduced.length})</h3>
+              <div className="bg-[#1E1E1E] rounded-xl p-4">
+                <h3 className="text-[#EDEAE1] font-medium mb-3">📦 Goods Produced ({goodsProduced.length})</h3>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="text-slate-400 text-left border-b border-slate-700">
+                      <tr className="text-[#EDEAE1]/70 text-left border-b border-[#16205B]">
                         <th className="pb-2">Date/Time</th>
                         <th className="pb-2">Product</th>
                         <th className="pb-2">Weight</th>
@@ -1221,28 +1232,28 @@ const AdminDashboard = ({ onBack, pluList, setPluList, showNotification }) => {
                     </thead>
                     <tbody>
                       {goodsProduced.slice(0, 20).map(item => (
-                        <tr key={item.id} className="border-b border-slate-700/50">
+                        <tr key={item.id} className="border-b border-[#16205B]/50">
                           <td className="py-2">{formatDateTime(item.scanned_at)}</td>
                           <td className="py-2">{item.product_name}</td>
                           <td className="py-2">{parseFloat(item.weight_kg).toFixed(3)} kg</td>
-                          <td className="py-2 text-slate-400">{item.scanned_by || '-'}</td>
+                          <td className="py-2 text-[#EDEAE1]/70">{item.scanned_by || '-'}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                   {goodsProduced.length === 0 && (
-                    <div className="text-center py-4 text-slate-500">No data for selected period</div>
+                    <div className="text-center py-4 text-[#EDEAE1]/50">No data for selected period</div>
                   )}
                 </div>
               </div>
             </>
           )}
 
-          <div className="bg-slate-800 rounded-xl p-4">
-            <h3 className="text-red-400 font-medium mb-3">⚠️ Danger Zone</h3>
+          <div className="bg-[#1E1E1E] rounded-xl p-4">
+            <h3 className="text-[#FF3300] font-medium mb-3">⚠️ Danger Zone</h3>
             <button
               onClick={clearAllData}
-              className="bg-red-600/20 border border-red-600 text-red-400 hover:bg-red-600 hover:text-white px-4 py-2 rounded-lg text-sm transition-colors"
+              className="bg-[#FF3300]/20 border border-[#FF3300] text-[#FF3300] hover:bg-[#FF3300] hover:text-white px-4 py-2 rounded-lg text-sm transition-colors"
             >
               🗑️ Clear All Data
             </button>
@@ -1253,9 +1264,9 @@ const AdminDashboard = ({ onBack, pluList, setPluList, showNotification }) => {
       {/* PLU Section */}
       {activeSection === 'plu' && (
         <div className="p-4 space-y-4">
-          <div className="bg-slate-800 rounded-xl p-4">
-            <h3 className="text-purple-400 font-medium mb-3">📋 PLU List Management</h3>
-            <p className="text-sm text-slate-400 mb-4">
+          <div className="bg-[#1E1E1E] rounded-xl p-4">
+            <h3 className="text-[#C0946F] font-medium mb-3">📋 PLU List Management</h3>
+            <p className="text-sm text-[#EDEAE1]/70 mb-4">
               Current: {pluList.length} products loaded
             </p>
             
@@ -1269,18 +1280,18 @@ const AdminDashboard = ({ onBack, pluList, setPluList, showNotification }) => {
             
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="w-full border-2 border-dashed border-slate-600 hover:border-emerald-500 rounded-xl p-8 text-center text-slate-400 hover:text-emerald-400 transition-colors"
+              className="w-full border-2 border-dashed border-[#16205B] hover:border-[#EB6619] rounded-xl p-8 text-center text-[#EDEAE1]/70 hover:text-[#EB6619] transition-colors"
             >
               📁 Click to upload MXi Pro CSV
             </button>
           </div>
 
-          <div className="bg-slate-800 rounded-xl p-4">
-            <h3 className="text-slate-400 font-medium mb-3">Current PLU List</h3>
+          <div className="bg-[#1E1E1E] rounded-xl p-4">
+            <h3 className="text-[#EDEAE1]/70 font-medium mb-3">Current PLU List</h3>
             <div className="max-h-96 overflow-y-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="text-slate-400 text-left border-b border-slate-700 sticky top-0 bg-slate-800">
+                  <tr className="text-[#EDEAE1]/70 text-left border-b border-[#16205B] sticky top-0 bg-[#1E1E1E]">
                     <th className="pb-2">PLU</th>
                     <th className="pb-2">Product</th>
                     <th className="pb-2">Category</th>
@@ -1288,19 +1299,19 @@ const AdminDashboard = ({ onBack, pluList, setPluList, showNotification }) => {
                 </thead>
                 <tbody>
                   {pluList.slice(0, 50).map(item => (
-                    <tr key={item.plu} className="border-b border-slate-700/50">
-                      <td className="py-2 text-emerald-400">{item.plu}</td>
+                    <tr key={item.plu} className="border-b border-[#16205B]/50">
+                      <td className="py-2 text-[#EB6619]">{item.plu}</td>
                       <td className="py-2">{item.product_name}</td>
-                      <td className="py-2 text-slate-400">{item.category}</td>
+                      <td className="py-2 text-[#EDEAE1]/70">{item.category}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
               {pluList.length === 0 && (
-                <div className="text-center py-8 text-slate-500">No PLU list loaded</div>
+                <div className="text-center py-8 text-[#EDEAE1]/50">No PLU list loaded</div>
               )}
               {pluList.length > 50 && (
-                <div className="text-center py-4 text-slate-500">Showing first 50 of {pluList.length} products</div>
+                <div className="text-center py-4 text-[#EDEAE1]/50">Showing first 50 of {pluList.length} products</div>
               )}
             </div>
           </div>
@@ -1310,15 +1321,15 @@ const AdminDashboard = ({ onBack, pluList, setPluList, showNotification }) => {
       {/* Users Section */}
       {activeSection === 'users' && (
         <div className="p-4 space-y-4">
-          <div className="bg-slate-800 rounded-xl p-4">
-            <h3 className="text-purple-400 font-medium mb-3">➕ Add New User</h3>
+          <div className="bg-[#1E1E1E] rounded-xl p-4">
+            <h3 className="text-[#C0946F] font-medium mb-3">➕ Add New User</h3>
             <div className="space-y-3">
               <input
                 type="text"
                 value={newUsername}
                 onChange={(e) => setNewUsername(e.target.value)}
                 placeholder="Username"
-                className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-sm"
+                className="w-full bg-[#16205B] border border-[#16205B] rounded-lg px-4 py-2 text-sm"
                 autoCapitalize="none"
               />
               <input
@@ -1326,38 +1337,38 @@ const AdminDashboard = ({ onBack, pluList, setPluList, showNotification }) => {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="Password"
-                className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-sm"
+                className="w-full bg-[#16205B] border border-[#16205B] rounded-lg px-4 py-2 text-sm"
               />
               <select
                 value={newRole}
                 onChange={(e) => setNewRole(e.target.value)}
-                className="w-full bg-slate-700 border border-slate-600 rounded-lg px-4 py-2 text-sm"
+                className="w-full bg-[#16205B] border border-[#16205B] rounded-lg px-4 py-2 text-sm"
               >
                 <option value="butcher">Butcher</option>
                 <option value="admin">Admin</option>
               </select>
               <button
                 onClick={addUser}
-                className="w-full bg-emerald-600 hover:bg-emerald-700 py-2 rounded-lg text-sm font-medium"
+                className="w-full bg-[#EB6619] hover:bg-[#EB6619]/90 py-2 rounded-lg text-sm font-medium"
               >
                 Add User
               </button>
             </div>
           </div>
 
-          <div className="bg-slate-800 rounded-xl p-4">
-            <h3 className="text-slate-400 font-medium mb-3">👥 Current Users</h3>
+          <div className="bg-[#1E1E1E] rounded-xl p-4">
+            <h3 className="text-[#EDEAE1]/70 font-medium mb-3">👥 Current Users</h3>
             <div className="space-y-2">
               {users.map(u => (
-                <div key={u.id} className="flex justify-between items-center bg-slate-700/50 rounded-lg p-3">
+                <div key={u.id} className="flex justify-between items-center bg-[#16205B]/50 rounded-lg p-3">
                   <div>
                     <div className="font-medium">{u.username}</div>
-                    <div className="text-xs text-slate-400">{u.role}</div>
+                    <div className="text-xs text-[#EDEAE1]/70">{u.role}</div>
                   </div>
                   {u.username !== 'admin' && (
                     <button
                       onClick={() => deleteUser(u.id, u.username)}
-                      className="text-red-400 hover:text-red-300 p-2"
+                      className="text-[#FF3300] hover:text-[#FF3300]/80 p-2"
                     >
                       ✕
                     </button>
@@ -1460,7 +1471,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900">
+    <div className="min-h-screen bg-[#16205B]">
       {notification && (
         <Notification
           message={notification.message}
