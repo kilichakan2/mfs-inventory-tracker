@@ -6,6 +6,19 @@ const supabaseUrl = 'https://yfccjvtdsnnzajwdbnyj.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlmY2NqdnRkc25uemFqd2RibnlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc3MDk3OTMsImV4cCI6MjA4MzI4NTc5M30.M8VM7dB5E8Ao43tQBXtvScNBt5E2vG61UdWG6HbwH-I';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+/*
+ * OPTION E COLOR SCHEME
+ * Background: #EDEAE1 (cream)
+ * Header: #590129 (maroon)
+ * Primary buttons: #590129 (maroon)
+ * Tabs active: #C0946F (sand)
+ * Cards: white
+ * Borders: #C0946F (sand)
+ * Text: #1a1a1a
+ * Muted text: #666
+ * Error: #FF3300
+ */
+
 // Sound Effects
 const playSound = (type) => {
   const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -16,8 +29,8 @@ const playSound = (type) => {
   gainNode.connect(audioContext.destination);
   
   if (type === 'success') {
-    oscillator.frequency.setValueAtTime(880, audioContext.currentTime); // A5
-    oscillator.frequency.setValueAtTime(1108, audioContext.currentTime + 0.1); // C#6
+    oscillator.frequency.setValueAtTime(880, audioContext.currentTime);
+    oscillator.frequency.setValueAtTime(1108, audioContext.currentTime + 0.1);
     gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
     gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
     oscillator.start(audioContext.currentTime);
@@ -38,7 +51,6 @@ const playSound = (type) => {
     oscillator.stop(audioContext.currentTime + 0.1);
   }
   
-  // Vibrate if supported
   if (navigator.vibrate) {
     if (type === 'success') navigator.vibrate(100);
     else if (type === 'error') navigator.vibrate([100, 50, 100]);
@@ -73,7 +85,6 @@ const parseCarcassBarcode = (barcode) => {
   if (cleaned.length < 15) return null;
   
   try {
-    const prefix = cleaned.substring(0, 3);
     const dateStr = cleaned.substring(3, 11);
     const year = dateStr.substring(0, 4);
     const month = dateStr.substring(4, 6);
@@ -118,17 +129,6 @@ const parseProductBarcode = (barcode) => {
   }
 };
 
-// Brand Colors
-const COLORS = {
-  navyBlue: '#16205B',
-  maroon: '#590129',
-  orange: '#EB6619',
-  red: '#FF3300',
-  sand: '#C0946F',
-  softNeutral: '#EDEAE1',
-  black: '#1E1E1E',
-};
-
 // Notification Component
 const Notification = ({ message, type, onClose }) => {
   useEffect(() => {
@@ -136,7 +136,7 @@ const Notification = ({ message, type, onClose }) => {
     return () => clearTimeout(timer);
   }, [onClose]);
   
-  const bgColor = type === 'error' ? 'bg-[#FF3300]' : type === 'warning' ? 'bg-[#C0946F]' : 'bg-[#EB6619]';
+  const bgColor = type === 'error' ? 'bg-[#FF3300]' : type === 'warning' ? 'bg-[#C0946F]' : 'bg-[#590129]';
   
   return (
     <div className={`fixed top-4 right-4 px-4 py-3 rounded-lg shadow-lg z-50 ${bgColor} text-white`}>
@@ -194,42 +194,42 @@ const LoginScreen = ({ onLogin, showNotification }) => {
   };
   
   return (
-    <div className="min-h-screen bg-[#16205B] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-[#590129] flex items-center justify-center p-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-[#EB6619] mb-2">MFS Inventory Tracker</h1>
-          <p className="text-[#EDEAE1]/70">Process Room Scanning System</p>
+          <h1 className="text-2xl font-bold text-[#C0946F] mb-2">MFS Inventory Tracker</h1>
+          <p className="text-white/70">Process Room Scanning System</p>
         </div>
         
-        <form onSubmit={handleLogin} className="bg-[#1E1E1E] rounded-xl p-6 space-y-4">
+        <form onSubmit={handleLogin} className="bg-white rounded-xl p-6 space-y-4 shadow-xl">
           <div>
-            <label className="block text-sm text-[#EDEAE1]/70 mb-2">Username</label>
+            <label className="block text-sm text-[#666] mb-2 font-medium">Username</label>
             <input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter username"
-              className="w-full bg-[#16205B] border border-[#16205B] rounded-lg px-4 py-3 text-white focus:border-[#EB6619] focus:outline-none"
+              className="w-full bg-[#EDEAE1] border-2 border-[#C0946F] rounded-lg px-4 py-3 text-[#1a1a1a] focus:border-[#590129] focus:outline-none"
               autoCapitalize="none"
               autoCorrect="off"
             />
           </div>
           
           <div>
-            <label className="block text-sm text-[#EDEAE1]/70 mb-2">Password</label>
+            <label className="block text-sm text-[#666] mb-2 font-medium">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Enter password"
-              className="w-full bg-[#16205B] border border-[#16205B] rounded-lg px-4 py-3 text-white focus:border-[#EB6619] focus:outline-none"
+              className="w-full bg-[#EDEAE1] border-2 border-[#C0946F] rounded-lg px-4 py-3 text-[#1a1a1a] focus:border-[#590129] focus:outline-none"
             />
           </div>
           
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#EB6619] hover:bg-[#EB6619]/90 disabled:bg-[#1E1E1E] py-4 rounded-xl font-semibold transition-colors text-white"
+            className="w-full bg-[#590129] hover:bg-[#590129]/90 disabled:bg-[#ccc] py-4 rounded-xl font-semibold transition-colors text-white"
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
@@ -241,51 +241,51 @@ const LoginScreen = ({ onLogin, showNotification }) => {
 
 // Main Menu Component
 const MainMenu = ({ onNavigate, user, onLogout }) => (
-  <div className="min-h-screen bg-[#16205B]">
-    <div className="bg-[#1E1E1E] border-b border-[#1E1E1E] px-4 py-4">
+  <div className="min-h-screen bg-[#EDEAE1]">
+    <div className="bg-[#590129] px-4 py-4">
       <div className="flex justify-between items-start">
         <div>
-          <h1 className="text-xl font-bold text-[#EB6619]">MFS Inventory Tracker</h1>
-          <p className="text-[#EDEAE1]/70 text-sm">Process Room Scanning System</p>
+          <h1 className="text-xl font-bold text-[#C0946F]">MFS Inventory Tracker</h1>
+          <p className="text-white/70 text-sm">Process Room Scanning System</p>
         </div>
         <div className="text-right">
-          <p className="text-sm text-[#EDEAE1]/70">Logged in as</p>
-          <p className="text-[#EB6619] font-medium">{user.username}</p>
+          <p className="text-sm text-white/70">Logged in as</p>
+          <p className="text-[#C0946F] font-medium">{user.username}</p>
         </div>
       </div>
     </div>
     <div className="p-4 space-y-3">
       <button
         onClick={() => onNavigate('lamb')}
-        className="w-full bg-[#1E1E1E] hover:bg-[#1E1E1E]/80 rounded-xl p-5 flex items-center gap-4 transition-colors"
+        className="w-full bg-white hover:bg-white/80 rounded-xl p-5 flex items-center gap-4 transition-colors shadow-sm border-l-4 border-[#590129]"
       >
         <span className="text-4xl">🐑</span>
         <div className="text-left">
-          <h3 className="text-lg font-semibold text-white">Lamb Inventory</h3>
-          <p className="text-sm text-[#EDEAE1]/70">Track lamb carcasses and products</p>
+          <h3 className="text-lg font-semibold text-[#1a1a1a]">Lamb Inventory</h3>
+          <p className="text-sm text-[#666]">Track lamb carcasses and products</p>
         </div>
       </button>
       
       <button
         disabled
-        className="w-full bg-[#1E1E1E]/50 rounded-xl p-5 flex items-center gap-4 opacity-50 cursor-not-allowed"
+        className="w-full bg-white/50 rounded-xl p-5 flex items-center gap-4 opacity-50 cursor-not-allowed"
       >
         <span className="text-4xl">🐄</span>
         <div className="text-left flex-1">
-          <h3 className="text-lg font-semibold text-white">Beef Inventory</h3>
-          <p className="text-sm text-[#EDEAE1]/70">Track beef carcasses and products</p>
+          <h3 className="text-lg font-semibold text-[#1a1a1a]">Beef Inventory</h3>
+          <p className="text-sm text-[#666]">Track beef carcasses and products</p>
         </div>
         <span className="text-xs bg-[#C0946F] text-white px-2 py-1 rounded">Coming Soon</span>
       </button>
       
       <button
         disabled
-        className="w-full bg-[#1E1E1E]/50 rounded-xl p-5 flex items-center gap-4 opacity-50 cursor-not-allowed"
+        className="w-full bg-white/50 rounded-xl p-5 flex items-center gap-4 opacity-50 cursor-not-allowed"
       >
         <span className="text-4xl">🐔</span>
         <div className="text-left flex-1">
-          <h3 className="text-lg font-semibold text-white">Poultry Inventory</h3>
-          <p className="text-sm text-[#EDEAE1]/70">Track poultry and products</p>
+          <h3 className="text-lg font-semibold text-[#1a1a1a]">Poultry Inventory</h3>
+          <p className="text-sm text-[#666]">Track poultry and products</p>
         </div>
         <span className="text-xs bg-[#C0946F] text-white px-2 py-1 rounded">Coming Soon</span>
       </button>
@@ -293,19 +293,19 @@ const MainMenu = ({ onNavigate, user, onLogout }) => (
       {user.role === 'admin' && (
         <button
           onClick={() => onNavigate('admin')}
-          className="w-full bg-[#1E1E1E] hover:bg-[#1E1E1E]/80 rounded-xl p-5 flex items-center gap-4 transition-colors"
+          className="w-full bg-white hover:bg-white/80 rounded-xl p-5 flex items-center gap-4 transition-colors shadow-sm border-l-4 border-[#C0946F]"
         >
           <span className="text-4xl">⚙️</span>
           <div className="text-left">
-            <h3 className="text-lg font-semibold text-white">Admin / Reports</h3>
-            <p className="text-sm text-[#EDEAE1]/70">View reports, manage PLU list</p>
+            <h3 className="text-lg font-semibold text-[#1a1a1a]">Admin / Reports</h3>
+            <p className="text-sm text-[#666]">View reports, manage PLU list</p>
           </div>
         </button>
       )}
       
       <button
         onClick={onLogout}
-        className="w-full bg-[#1E1E1E] hover:bg-[#FF3300]/20 rounded-xl p-4 flex items-center justify-center gap-2 transition-colors text-[#EDEAE1]/70 hover:text-[#FF3300]"
+        className="w-full bg-white hover:bg-[#FF3300]/10 rounded-xl p-4 flex items-center justify-center gap-2 transition-colors text-[#666] hover:text-[#FF3300] shadow-sm"
       >
         <span>🚪</span>
         <span>Logout</span>
@@ -329,7 +329,7 @@ const Numpad = ({ value, onChange }) => {
   const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', 'delete'];
   
   return (
-    <div className="grid grid-cols-3 gap-2 p-4 bg-[#1E1E1E] rounded-xl">
+    <div className="grid grid-cols-3 gap-2 p-4 bg-[#EDEAE1] rounded-xl">
       {keys.map((key) => (
         <button
           key={key}
@@ -337,7 +337,7 @@ const Numpad = ({ value, onChange }) => {
           className={`p-4 text-xl font-semibold rounded-lg transition-colors ${
             key === 'delete' 
               ? 'bg-[#FF3300] hover:bg-[#FF3300]/80 text-white' 
-              : 'bg-[#16205B] hover:bg-[#16205B]/80 text-white'
+              : 'bg-white hover:bg-[#C0946F] hover:text-white text-[#1a1a1a] border border-[#C0946F]'
           }`}
         >
           {key === 'delete' ? '⌫' : key}
@@ -347,21 +347,19 @@ const Numpad = ({ value, onChange }) => {
   );
 };
 
-// Product Module Component (Lamb/Beef/Poultry)
-const ProductModule = ({ productType, productEmoji, onBack, pluList, showNotification, user, isOnline, syncOfflineQueue }) => {
+// Product Module Component
+const ProductModule = ({ productType, productEmoji, onBack, pluList, showNotification, user, isOnline }) => {
   const [activeTab, setActiveTab] = useState('goodsIn');
   const [goodsIn, setGoodsIn] = useState([]);
   const [goodsProduced, setGoodsProduced] = useState([]);
   const [loading, setLoading] = useState(true);
   const [lastEntry, setLastEntry] = useState(null);
   
-  // Goods In state
   const [carcassBarcode, setCarcassBarcode] = useState('');
   const [carcassWeight, setCarcassWeight] = useState('');
   const [parsedCarcass, setParsedCarcass] = useState(null);
   const [showNumpad, setShowNumpad] = useState(false);
   
-  // Goods Produced state
   const [productBarcode, setProductBarcode] = useState('');
   const [parsedProduct, setParsedProduct] = useState(null);
   
@@ -455,7 +453,6 @@ const ProductModule = ({ productType, productEmoji, onBack, pluList, showNotific
       const { data, error } = await supabase.from('goods_in').insert(entry).select();
       
       if (error) {
-        // If online but error, queue it
         addToOfflineQueue({ type: 'goods_in', data: entry });
         showNotification('Saved offline - will sync later', 'warning');
       } else {
@@ -464,7 +461,6 @@ const ProductModule = ({ productType, productEmoji, onBack, pluList, showNotific
         showNotification(`Added: Kill #${parsedCarcass.killNumber} - ${carcassWeight}kg`);
       }
     } else {
-      // Offline - queue it
       const offlineEntry = { ...entry, id: `offline_${Date.now()}`, scanned_at: new Date().toISOString() };
       addToOfflineQueue({ type: 'goods_in', data: entry });
       setGoodsIn([offlineEntry, ...goodsIn]);
@@ -474,7 +470,6 @@ const ProductModule = ({ productType, productEmoji, onBack, pluList, showNotific
     
     playSound('success');
     
-    // Reset
     setCarcassBarcode('');
     setCarcassWeight('');
     setParsedCarcass(null);
@@ -521,22 +516,18 @@ const ProductModule = ({ productType, productEmoji, onBack, pluList, showNotific
     }, 500);
   };
 
-  // Undo last entry
   const undoLastEntry = async () => {
     if (!lastEntry) return;
     
     if (lastEntry.offline) {
-      // Remove from offline queue
       const queue = getOfflineQueue();
       const filtered = queue.filter(item => item.queued_at !== lastEntry.data.queued_at);
       localStorage.setItem(OFFLINE_QUEUE_KEY, JSON.stringify(filtered));
     } else {
-      // Delete from database
       const table = lastEntry.type === 'goods_in' ? 'goods_in' : 'goods_produced';
       await supabase.from(table).delete().eq('id', lastEntry.data.id);
     }
     
-    // Remove from local state
     if (lastEntry.type === 'goods_in') {
       setGoodsIn(goodsIn.filter(item => item.id !== lastEntry.data.id));
     } else {
@@ -587,25 +578,25 @@ const ProductModule = ({ productType, productEmoji, onBack, pluList, showNotific
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#16205B] flex items-center justify-center">
-        <div className="text-white text-xl">Loading...</div>
+      <div className="min-h-screen bg-[#EDEAE1] flex items-center justify-center">
+        <div className="text-[#590129] text-xl font-medium">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#16205B] text-white pb-20">
+    <div className="min-h-screen bg-[#EDEAE1] text-[#1a1a1a] pb-20">
       {/* Header */}
-      <div className="bg-[#1E1E1E] border-b border-[#1E1E1E] px-4 py-3">
-        <button onClick={onBack} className="text-[#EDEAE1]/70 text-sm mb-2 flex items-center gap-1">
+      <div className="bg-[#590129] px-4 py-3">
+        <button onClick={onBack} className="text-white/70 text-sm mb-2 flex items-center gap-1">
           ← Back to Menu
         </button>
         <div className="flex justify-between items-center">
-          <h1 className="text-xl font-bold text-[#EB6619]">{productEmoji} {productType.charAt(0).toUpperCase() + productType.slice(1)} Inventory</h1>
+          <h1 className="text-xl font-bold text-[#C0946F]">{productEmoji} {productType.charAt(0).toUpperCase() + productType.slice(1)} Inventory</h1>
           {lastEntry && (
             <button
               onClick={undoLastEntry}
-              className="bg-[#C0946F] hover:bg-[#C0946F]/80 px-3 py-1 rounded-lg text-sm font-medium flex items-center gap-1"
+              className="bg-[#C0946F] hover:bg-[#C0946F]/80 px-3 py-1 rounded-lg text-sm font-medium flex items-center gap-1 text-white"
             >
               ↩️ Undo
             </button>
@@ -614,19 +605,23 @@ const ProductModule = ({ productType, productEmoji, onBack, pluList, showNotific
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-[#1E1E1E]">
+      <div className="flex">
         <button
           onClick={() => setActiveTab('goodsIn')}
-          className={`flex-1 py-3 px-4 text-center font-medium transition-colors ${
-            activeTab === 'goodsIn' ? 'bg-[#EB6619] text-white' : 'bg-[#1E1E1E] text-[#EDEAE1]/70'
+          className={`flex-1 py-3 px-4 text-center font-medium transition-colors border-b-2 ${
+            activeTab === 'goodsIn' 
+              ? 'bg-[#C0946F] text-white border-[#C0946F]' 
+              : 'bg-white text-[#590129] border-[#ddd]'
           }`}
         >
           📥 Goods In
         </button>
         <button
           onClick={() => setActiveTab('goodsProduced')}
-          className={`flex-1 py-3 px-4 text-center font-medium transition-colors ${
-            activeTab === 'goodsProduced' ? 'bg-[#590129] text-white' : 'bg-[#1E1E1E] text-[#EDEAE1]/70'
+          className={`flex-1 py-3 px-4 text-center font-medium transition-colors border-b-2 ${
+            activeTab === 'goodsProduced' 
+              ? 'bg-[#590129] text-white border-[#590129]' 
+              : 'bg-white text-[#590129] border-[#ddd]'
           }`}
         >
           📦 Goods Produced
@@ -636,62 +631,62 @@ const ProductModule = ({ productType, productEmoji, onBack, pluList, showNotific
       {/* Goods In Tab */}
       {activeTab === 'goodsIn' && (
         <div className="p-4 space-y-4">
-          <div className="bg-[#EB6619]/20 border border-[#EB6619] rounded-xl p-4">
-            <div className="text-[#EB6619] text-sm font-medium mb-2">Today's Intake</div>
+          <div className="bg-white border-2 border-[#C0946F] rounded-xl p-4">
+            <div className="text-[#590129] text-sm font-semibold mb-2 uppercase tracking-wide">Today's Intake</div>
             <div className="flex gap-8">
               <div>
-                <span className="text-3xl font-bold">{goodsIn.length}</span>
-                <span className="text-[#EDEAE1]/70 ml-2">carcasses</span>
+                <span className="text-3xl font-bold text-[#1a1a1a]">{goodsIn.length}</span>
+                <span className="text-[#666] ml-2">carcasses</span>
               </div>
               <div>
-                <span className="text-3xl font-bold">{goodsInTotal.toFixed(1)}</span>
-                <span className="text-[#EDEAE1]/70 ml-2">kg</span>
+                <span className="text-3xl font-bold text-[#1a1a1a]">{goodsInTotal.toFixed(1)}</span>
+                <span className="text-[#666] ml-2">kg</span>
               </div>
             </div>
           </div>
 
-          <div className="bg-[#1E1E1E] rounded-xl p-4 space-y-3">
+          <div className="bg-white rounded-xl p-4 space-y-3 shadow-sm">
             <div>
-              <label className="block text-sm text-[#EDEAE1]/70 mb-2">Scan Carcass Barcode</label>
+              <label className="block text-sm text-[#666] mb-2 font-medium">Scan Carcass Barcode</label>
               <input
                 ref={carcassInputRef}
                 type="text"
                 value={carcassBarcode}
                 onChange={(e) => handleCarcassBarcodeChange(e.target.value)}
                 placeholder="Scan or enter barcode..."
-                className="w-full bg-[#16205B] border border-[#16205B] rounded-lg px-4 py-3 text-lg focus:border-[#EB6619] focus:outline-none"
+                className="w-full bg-[#EDEAE1] border-2 border-[#C0946F] rounded-lg px-4 py-3 text-lg focus:border-[#590129] focus:outline-none"
                 autoFocus
               />
             </div>
 
             {parsedCarcass && (
-              <div className="bg-[#16205B]/50 rounded-lg p-3 grid grid-cols-2 gap-3">
+              <div className="bg-[#EDEAE1] rounded-lg p-3 grid grid-cols-2 gap-3">
                 <div className="text-sm">
-                  <span className="text-[#EDEAE1]/70">Kill Date: </span>
-                  <span className="text-[#EB6619] font-medium">{parsedCarcass.killDateDisplay}</span>
+                  <span className="text-[#666]">Kill Date: </span>
+                  <span className="text-[#590129] font-semibold">{parsedCarcass.killDateDisplay}</span>
                 </div>
                 <div className="text-sm">
-                  <span className="text-[#EDEAE1]/70">Kill Number: </span>
-                  <span className="text-[#EB6619] font-medium">{parsedCarcass.killNumber}</span>
+                  <span className="text-[#666]">Kill Number: </span>
+                  <span className="text-[#590129] font-semibold">{parsedCarcass.killNumber}</span>
                 </div>
               </div>
             )}
 
             {carcassBarcode && !parsedCarcass && carcassBarcode.length >= 10 && (
-              <div className="bg-[#FF3300]/20 border border-[#FF3300] rounded-lg p-3 text-[#FF3300] text-sm">
+              <div className="bg-[#FF3300]/10 border-2 border-[#FF3300] rounded-lg p-3 text-[#FF3300] text-sm">
                 ⚠️ Could not parse barcode - check format
               </div>
             )}
 
             <div>
-              <label className="block text-sm text-[#EDEAE1]/70 mb-2">Weight (kg)</label>
+              <label className="block text-sm text-[#666] mb-2 font-medium">Weight (kg)</label>
               <input
                 type="text"
                 value={carcassWeight}
                 onChange={(e) => setCarcassWeight(e.target.value)}
                 onFocus={() => setShowNumpad(true)}
                 placeholder="Enter weight..."
-                className="w-full bg-[#16205B] border border-[#16205B] rounded-lg px-4 py-3 text-lg focus:border-[#EB6619] focus:outline-none"
+                className="w-full bg-[#EDEAE1] border-2 border-[#C0946F] rounded-lg px-4 py-3 text-lg focus:border-[#590129] focus:outline-none"
                 readOnly
               />
             </div>
@@ -703,23 +698,23 @@ const ProductModule = ({ productType, productEmoji, onBack, pluList, showNotific
             <button
               onClick={saveGoodsIn}
               disabled={!parsedCarcass || !carcassWeight}
-              className="w-full bg-[#EB6619] hover:bg-[#EB6619]/90 disabled:bg-[#1E1E1E] disabled:cursor-not-allowed py-4 rounded-xl font-semibold transition-colors"
+              className="w-full bg-[#590129] hover:bg-[#590129]/90 disabled:bg-[#ccc] disabled:cursor-not-allowed py-4 rounded-xl font-semibold transition-colors text-white"
             >
               + Add Carcass
             </button>
           </div>
 
           <div>
-            <h3 className="text-[#EDEAE1]/70 text-sm font-medium mb-2">Today's Entries</h3>
+            <h3 className="text-[#666] text-sm font-semibold mb-2 uppercase tracking-wide">Today's Entries</h3>
             <div className="space-y-2">
               {goodsIn.slice(0, 10).map(item => (
-                <div key={item.id} className={`bg-[#1E1E1E] rounded-lg p-3 flex justify-between items-center ${item.id.toString().startsWith('offline_') ? 'border border-[#C0946F]' : ''}`}>
+                <div key={item.id} className={`bg-white rounded-lg p-3 flex justify-between items-center shadow-sm border-l-4 ${item.id.toString().startsWith('offline_') ? 'border-[#C0946F]' : 'border-[#590129]'}`}>
                   <div>
-                    <div className="font-medium">
+                    <div className="font-semibold text-[#1a1a1a]">
                       Kill #{item.kill_number}
                       {item.id.toString().startsWith('offline_') && <span className="ml-2 text-xs text-[#C0946F]">⏳ Pending sync</span>}
                     </div>
-                    <div className="text-sm text-[#EDEAE1]/70">
+                    <div className="text-sm text-[#666]">
                       {formatDate(item.kill_date)} • {item.weight_kg}kg • {formatTime(item.scanned_at)}
                     </div>
                   </div>
@@ -727,7 +722,7 @@ const ProductModule = ({ productType, productEmoji, onBack, pluList, showNotific
                 </div>
               ))}
               {goodsIn.length === 0 && (
-                <div className="text-[#EDEAE1]/50 text-center py-8">No entries yet today</div>
+                <div className="text-[#666] text-center py-8 bg-white rounded-lg">No entries yet today</div>
               )}
             </div>
           </div>
@@ -737,75 +732,75 @@ const ProductModule = ({ productType, productEmoji, onBack, pluList, showNotific
       {/* Goods Produced Tab */}
       {activeTab === 'goodsProduced' && (
         <div className="p-4 space-y-4">
-          <div className="bg-[#590129]/30 border border-[#590129] rounded-xl p-4">
-            <div className="text-[#EDEAE1] text-sm font-medium mb-2">Today's Production</div>
+          <div className="bg-white border-2 border-[#590129] rounded-xl p-4">
+            <div className="text-[#590129] text-sm font-semibold mb-2 uppercase tracking-wide">Today's Production</div>
             <div className="flex gap-8">
               <div>
-                <span className="text-3xl font-bold">{goodsProduced.length}</span>
-                <span className="text-[#EDEAE1]/70 ml-2">items</span>
+                <span className="text-3xl font-bold text-[#1a1a1a]">{goodsProduced.length}</span>
+                <span className="text-[#666] ml-2">items</span>
               </div>
               <div>
-                <span className="text-3xl font-bold">{goodsProducedTotal.toFixed(1)}</span>
-                <span className="text-[#EDEAE1]/70 ml-2">kg</span>
+                <span className="text-3xl font-bold text-[#1a1a1a]">{goodsProducedTotal.toFixed(1)}</span>
+                <span className="text-[#666] ml-2">kg</span>
               </div>
             </div>
           </div>
 
-          <div className="bg-[#1E1E1E] rounded-xl p-4 space-y-3">
+          <div className="bg-white rounded-xl p-4 space-y-3 shadow-sm">
             <div>
-              <label className="block text-sm text-[#EDEAE1]/70 mb-2">Scan Product Barcode (EAN-13)</label>
+              <label className="block text-sm text-[#666] mb-2 font-medium">Scan Product Barcode (EAN-13)</label>
               <input
                 ref={productInputRef}
                 type="text"
                 value={productBarcode}
                 onChange={(e) => handleProductBarcodeChange(e.target.value)}
                 placeholder="Scan product label..."
-                className="w-full bg-[#16205B] border border-[#16205B] rounded-lg px-4 py-3 text-lg focus:border-[#590129] focus:outline-none"
+                className="w-full bg-[#EDEAE1] border-2 border-[#590129] rounded-lg px-4 py-3 text-lg focus:border-[#C0946F] focus:outline-none"
                 autoFocus
               />
             </div>
 
             {parsedProduct && (
-              <div className="bg-[#16205B]/50 rounded-lg p-3 space-y-2">
+              <div className="bg-[#EDEAE1] rounded-lg p-3 space-y-2">
                 <div className="grid grid-cols-2 gap-3">
                   <div className="text-sm">
-                    <span className="text-[#EDEAE1]/70">PLU: </span>
-                    <span className="text-[#EDEAE1] font-medium">{parsedProduct.plu}</span>
+                    <span className="text-[#666]">PLU: </span>
+                    <span className="text-[#590129] font-semibold">{parsedProduct.plu}</span>
                   </div>
                   <div className="text-sm">
-                    <span className="text-[#EDEAE1]/70">Weight: </span>
-                    <span className="text-[#EDEAE1] font-medium">{parsedProduct.weight.toFixed(3)} kg</span>
+                    <span className="text-[#666]">Weight: </span>
+                    <span className="text-[#590129] font-semibold">{parsedProduct.weight.toFixed(3)} kg</span>
                   </div>
                 </div>
                 <div className="text-sm">
-                  <span className="text-[#EDEAE1]/70">Product: </span>
-                  <span className="text-[#EDEAE1] font-medium">{parsedProduct.productName}</span>
+                  <span className="text-[#666]">Product: </span>
+                  <span className="text-[#590129] font-semibold">{parsedProduct.productName}</span>
                 </div>
               </div>
             )}
 
             {productBarcode && !parsedProduct && productBarcode.length >= 10 && (
-              <div className="bg-[#FF3300]/20 border border-[#FF3300] rounded-lg p-3 text-[#FF3300] text-sm">
+              <div className="bg-[#FF3300]/10 border-2 border-[#FF3300] rounded-lg p-3 text-[#FF3300] text-sm">
                 ⚠️ Could not parse barcode - ensure Avery Berkel is set to Format 14
               </div>
             )}
 
-            <div className="bg-[#590129] py-4 rounded-xl font-semibold text-center">
+            <div className="bg-[#590129] py-4 rounded-xl font-semibold text-center text-white">
               ✓ Auto-saves on scan — Ready for next item
             </div>
           </div>
 
           <div>
-            <h3 className="text-[#EDEAE1]/70 text-sm font-medium mb-2">Today's Entries</h3>
+            <h3 className="text-[#666] text-sm font-semibold mb-2 uppercase tracking-wide">Today's Entries</h3>
             <div className="space-y-2">
               {goodsProduced.slice(0, 10).map(item => (
-                <div key={item.id} className={`bg-[#1E1E1E] rounded-lg p-3 flex justify-between items-center ${item.id.toString().startsWith('offline_') ? 'border border-[#C0946F]' : ''}`}>
+                <div key={item.id} className={`bg-white rounded-lg p-3 flex justify-between items-center shadow-sm border-l-4 ${item.id.toString().startsWith('offline_') ? 'border-[#C0946F]' : 'border-[#590129]'}`}>
                   <div>
-                    <div className="font-medium">
+                    <div className="font-semibold text-[#1a1a1a]">
                       {item.product_name}
                       {item.id.toString().startsWith('offline_') && <span className="ml-2 text-xs text-[#C0946F]">⏳ Pending sync</span>}
                     </div>
-                    <div className="text-sm text-[#EDEAE1]/70">
+                    <div className="text-sm text-[#666]">
                       {parseFloat(item.weight_kg).toFixed(3)}kg • PLU {item.plu} • {formatTime(item.scanned_at)}
                     </div>
                   </div>
@@ -813,7 +808,7 @@ const ProductModule = ({ productType, productEmoji, onBack, pluList, showNotific
                 </div>
               ))}
               {goodsProduced.length === 0 && (
-                <div className="text-[#EDEAE1]/50 text-center py-8">No entries yet today</div>
+                <div className="text-[#666] text-center py-8 bg-white rounded-lg">No entries yet today</div>
               )}
             </div>
           </div>
@@ -835,7 +830,6 @@ const AdminDashboard = ({ onBack, pluList, setPluList, showNotification }) => {
   const [customDateFrom, setCustomDateFrom] = useState('');
   const [customDateTo, setCustomDateTo] = useState('');
   
-  // New user form
   const [newUsername, setNewUsername] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [newRole, setNewRole] = useState('butcher');
@@ -1077,35 +1071,35 @@ const AdminDashboard = ({ onBack, pluList, setPluList, showNotification }) => {
   };
 
   return (
-    <div className="min-h-screen bg-[#16205B] text-white">
-      <div className="bg-[#1E1E1E] border-b border-[#1E1E1E] px-4 py-3">
-        <button onClick={onBack} className="text-[#EDEAE1]/70 text-sm mb-2 flex items-center gap-1">
+    <div className="min-h-screen bg-[#EDEAE1] text-[#1a1a1a]">
+      <div className="bg-[#590129] px-4 py-3">
+        <button onClick={onBack} className="text-white/70 text-sm mb-2 flex items-center gap-1">
           ← Back to Menu
         </button>
-        <h1 className="text-xl font-bold text-[#EB6619]">⚙️ Admin / Reports</h1>
+        <h1 className="text-xl font-bold text-[#C0946F]">⚙️ Admin / Reports</h1>
       </div>
 
-      <div className="flex border-b border-[#1E1E1E]">
+      <div className="flex">
         <button
           onClick={() => setActiveSection('reports')}
-          className={`flex-1 py-3 px-4 text-center font-medium transition-colors ${
-            activeSection === 'reports' ? 'bg-[#C0946F] text-white' : 'bg-[#1E1E1E] text-[#EDEAE1]/70'
+          className={`flex-1 py-3 px-4 text-center font-medium transition-colors border-b-2 ${
+            activeSection === 'reports' ? 'bg-[#C0946F] text-white border-[#C0946F]' : 'bg-white text-[#590129] border-[#ddd]'
           }`}
         >
           📊 Reports
         </button>
         <button
           onClick={() => setActiveSection('plu')}
-          className={`flex-1 py-3 px-4 text-center font-medium transition-colors ${
-            activeSection === 'plu' ? 'bg-[#C0946F] text-white' : 'bg-[#1E1E1E] text-[#EDEAE1]/70'
+          className={`flex-1 py-3 px-4 text-center font-medium transition-colors border-b-2 ${
+            activeSection === 'plu' ? 'bg-[#C0946F] text-white border-[#C0946F]' : 'bg-white text-[#590129] border-[#ddd]'
           }`}
         >
           📋 PLU
         </button>
         <button
           onClick={() => setActiveSection('users')}
-          className={`flex-1 py-3 px-4 text-center font-medium transition-colors ${
-            activeSection === 'users' ? 'bg-[#C0946F] text-white' : 'bg-[#1E1E1E] text-[#EDEAE1]/70'
+          className={`flex-1 py-3 px-4 text-center font-medium transition-colors border-b-2 ${
+            activeSection === 'users' ? 'bg-[#C0946F] text-white border-[#C0946F]' : 'bg-white text-[#590129] border-[#ddd]'
           }`}
         >
           👥 Users
@@ -1116,29 +1110,29 @@ const AdminDashboard = ({ onBack, pluList, setPluList, showNotification }) => {
       {activeSection === 'reports' && (
         <div className="p-4 space-y-4">
           <div className="grid grid-cols-3 gap-3">
-            <div className="bg-[#EB6619]/20 border border-[#EB6619] rounded-xl p-4 text-center">
-              <div className="text-2xl font-bold text-[#EB6619]">{goodsIn.length}</div>
-              <div className="text-xs text-[#EDEAE1]/70">Carcasses In</div>
-              <div className="text-sm text-[#EB6619]">{goodsInTotal.toFixed(1)} kg</div>
+            <div className="bg-white border-2 border-[#C0946F] rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-[#C0946F]">{goodsIn.length}</div>
+              <div className="text-xs text-[#666]">Carcasses In</div>
+              <div className="text-sm text-[#C0946F]">{goodsInTotal.toFixed(1)} kg</div>
             </div>
-            <div className="bg-[#590129]/30 border border-[#590129] rounded-xl p-4 text-center">
-              <div className="text-2xl font-bold text-[#EDEAE1]">{goodsProduced.length}</div>
-              <div className="text-xs text-[#EDEAE1]/70">Products Out</div>
-              <div className="text-sm text-[#EDEAE1]">{goodsProducedTotal.toFixed(1)} kg</div>
+            <div className="bg-white border-2 border-[#590129] rounded-xl p-4 text-center">
+              <div className="text-2xl font-bold text-[#590129]">{goodsProduced.length}</div>
+              <div className="text-xs text-[#666]">Products Out</div>
+              <div className="text-sm text-[#590129]">{goodsProducedTotal.toFixed(1)} kg</div>
             </div>
-            <div className="bg-[#C0946F]/20 border border-[#C0946F] rounded-xl p-4 text-center">
+            <div className="bg-[#590129] rounded-xl p-4 text-center">
               <div className="text-2xl font-bold text-[#C0946F]">{yieldPercent}%</div>
-              <div className="text-xs text-[#EDEAE1]/70">Yield</div>
+              <div className="text-xs text-white/70">Yield</div>
             </div>
           </div>
 
-          <div className="bg-[#1E1E1E] rounded-xl p-4 space-y-3">
-            <h3 className="text-sm font-medium text-[#EDEAE1]/70">Filters</h3>
+          <div className="bg-white rounded-xl p-4 space-y-3 shadow-sm">
+            <h3 className="text-sm font-semibold text-[#666] uppercase tracking-wide">Filters</h3>
             <div className="grid grid-cols-2 gap-3">
               <select
                 value={productFilter}
                 onChange={(e) => setProductFilter(e.target.value)}
-                className="bg-[#16205B] border border-[#16205B] rounded-lg px-3 py-2 text-sm"
+                className="bg-[#EDEAE1] border-2 border-[#C0946F] rounded-lg px-3 py-2 text-sm"
               >
                 <option value="all">All Products</option>
                 <option value="lamb">🐑 Lamb</option>
@@ -1148,7 +1142,7 @@ const AdminDashboard = ({ onBack, pluList, setPluList, showNotification }) => {
               <select
                 value={dateFilter}
                 onChange={(e) => setDateFilter(e.target.value)}
-                className="bg-[#16205B] border border-[#16205B] rounded-lg px-3 py-2 text-sm"
+                className="bg-[#EDEAE1] border-2 border-[#C0946F] rounded-lg px-3 py-2 text-sm"
               >
                 <option value="today">Today</option>
                 <option value="yesterday">Yesterday</option>
@@ -1164,37 +1158,37 @@ const AdminDashboard = ({ onBack, pluList, setPluList, showNotification }) => {
                   type="date"
                   value={customDateFrom}
                   onChange={(e) => setCustomDateFrom(e.target.value)}
-                  className="bg-[#16205B] border border-[#16205B] rounded-lg px-3 py-2 text-sm"
+                  className="bg-[#EDEAE1] border-2 border-[#C0946F] rounded-lg px-3 py-2 text-sm"
                 />
                 <input
                   type="date"
                   value={customDateTo}
                   onChange={(e) => setCustomDateTo(e.target.value)}
-                  className="bg-[#16205B] border border-[#16205B] rounded-lg px-3 py-2 text-sm"
+                  className="bg-[#EDEAE1] border-2 border-[#C0946F] rounded-lg px-3 py-2 text-sm"
                 />
               </div>
             )}
             
             <div className="flex gap-2">
-              <button onClick={exportGoodsIn} className="flex-1 bg-[#EB6619] hover:bg-[#EB6619]/90 py-2 rounded-lg text-sm font-medium">
+              <button onClick={exportGoodsIn} className="flex-1 bg-[#C0946F] hover:bg-[#C0946F]/90 py-2 rounded-lg text-sm font-medium text-white">
                 Export Goods In
               </button>
-              <button onClick={exportGoodsProduced} className="flex-1 bg-[#590129] hover:bg-[#590129]/90 py-2 rounded-lg text-sm font-medium">
+              <button onClick={exportGoodsProduced} className="flex-1 bg-[#590129] hover:bg-[#590129]/90 py-2 rounded-lg text-sm font-medium text-white">
                 Export Goods Out
               </button>
             </div>
           </div>
 
           {loading ? (
-            <div className="text-center py-8 text-[#EDEAE1]/70">Loading...</div>
+            <div className="text-center py-8 text-[#666]">Loading...</div>
           ) : (
             <>
-              <div className="bg-[#1E1E1E] rounded-xl p-4">
-                <h3 className="text-[#EB6619] font-medium mb-3">📥 Goods In ({goodsIn.length})</h3>
+              <div className="bg-white rounded-xl p-4 shadow-sm">
+                <h3 className="text-[#C0946F] font-semibold mb-3">📥 Goods In ({goodsIn.length})</h3>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="text-[#EDEAE1]/70 text-left border-b border-[#16205B]">
+                      <tr className="text-[#666] text-left border-b-2 border-[#EDEAE1]">
                         <th className="pb-2">Date/Time</th>
                         <th className="pb-2">Kill #</th>
                         <th className="pb-2">Weight</th>
@@ -1203,27 +1197,27 @@ const AdminDashboard = ({ onBack, pluList, setPluList, showNotification }) => {
                     </thead>
                     <tbody>
                       {goodsIn.slice(0, 20).map(item => (
-                        <tr key={item.id} className="border-b border-[#16205B]/50">
+                        <tr key={item.id} className="border-b border-[#EDEAE1]">
                           <td className="py-2">{formatDateTime(item.scanned_at)}</td>
                           <td className="py-2">{item.kill_number}</td>
                           <td className="py-2">{item.weight_kg} kg</td>
-                          <td className="py-2 text-[#EDEAE1]/70">{item.scanned_by || '-'}</td>
+                          <td className="py-2 text-[#666]">{item.scanned_by || '-'}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                   {goodsIn.length === 0 && (
-                    <div className="text-center py-4 text-[#EDEAE1]/50">No data for selected period</div>
+                    <div className="text-center py-4 text-[#666]">No data for selected period</div>
                   )}
                 </div>
               </div>
 
-              <div className="bg-[#1E1E1E] rounded-xl p-4">
-                <h3 className="text-[#EDEAE1] font-medium mb-3">📦 Goods Produced ({goodsProduced.length})</h3>
+              <div className="bg-white rounded-xl p-4 shadow-sm">
+                <h3 className="text-[#590129] font-semibold mb-3">📦 Goods Produced ({goodsProduced.length})</h3>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="text-[#EDEAE1]/70 text-left border-b border-[#16205B]">
+                      <tr className="text-[#666] text-left border-b-2 border-[#EDEAE1]">
                         <th className="pb-2">Date/Time</th>
                         <th className="pb-2">Product</th>
                         <th className="pb-2">Weight</th>
@@ -1232,28 +1226,28 @@ const AdminDashboard = ({ onBack, pluList, setPluList, showNotification }) => {
                     </thead>
                     <tbody>
                       {goodsProduced.slice(0, 20).map(item => (
-                        <tr key={item.id} className="border-b border-[#16205B]/50">
+                        <tr key={item.id} className="border-b border-[#EDEAE1]">
                           <td className="py-2">{formatDateTime(item.scanned_at)}</td>
                           <td className="py-2">{item.product_name}</td>
                           <td className="py-2">{parseFloat(item.weight_kg).toFixed(3)} kg</td>
-                          <td className="py-2 text-[#EDEAE1]/70">{item.scanned_by || '-'}</td>
+                          <td className="py-2 text-[#666]">{item.scanned_by || '-'}</td>
                         </tr>
                       ))}
                     </tbody>
                   </table>
                   {goodsProduced.length === 0 && (
-                    <div className="text-center py-4 text-[#EDEAE1]/50">No data for selected period</div>
+                    <div className="text-center py-4 text-[#666]">No data for selected period</div>
                   )}
                 </div>
               </div>
             </>
           )}
 
-          <div className="bg-[#1E1E1E] rounded-xl p-4">
-            <h3 className="text-[#FF3300] font-medium mb-3">⚠️ Danger Zone</h3>
+          <div className="bg-white rounded-xl p-4 shadow-sm">
+            <h3 className="text-[#FF3300] font-semibold mb-3">⚠️ Danger Zone</h3>
             <button
               onClick={clearAllData}
-              className="bg-[#FF3300]/20 border border-[#FF3300] text-[#FF3300] hover:bg-[#FF3300] hover:text-white px-4 py-2 rounded-lg text-sm transition-colors"
+              className="bg-white border-2 border-[#FF3300] text-[#FF3300] hover:bg-[#FF3300] hover:text-white px-4 py-2 rounded-lg text-sm transition-colors"
             >
               🗑️ Clear All Data
             </button>
@@ -1264,9 +1258,9 @@ const AdminDashboard = ({ onBack, pluList, setPluList, showNotification }) => {
       {/* PLU Section */}
       {activeSection === 'plu' && (
         <div className="p-4 space-y-4">
-          <div className="bg-[#1E1E1E] rounded-xl p-4">
-            <h3 className="text-[#C0946F] font-medium mb-3">📋 PLU List Management</h3>
-            <p className="text-sm text-[#EDEAE1]/70 mb-4">
+          <div className="bg-white rounded-xl p-4 shadow-sm">
+            <h3 className="text-[#C0946F] font-semibold mb-3">📋 PLU List Management</h3>
+            <p className="text-sm text-[#666] mb-4">
               Current: {pluList.length} products loaded
             </p>
             
@@ -1280,18 +1274,18 @@ const AdminDashboard = ({ onBack, pluList, setPluList, showNotification }) => {
             
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="w-full border-2 border-dashed border-[#16205B] hover:border-[#EB6619] rounded-xl p-8 text-center text-[#EDEAE1]/70 hover:text-[#EB6619] transition-colors"
+              className="w-full border-2 border-dashed border-[#C0946F] hover:border-[#590129] rounded-xl p-8 text-center text-[#666] hover:text-[#590129] transition-colors"
             >
               📁 Click to upload MXi Pro CSV
             </button>
           </div>
 
-          <div className="bg-[#1E1E1E] rounded-xl p-4">
-            <h3 className="text-[#EDEAE1]/70 font-medium mb-3">Current PLU List</h3>
+          <div className="bg-white rounded-xl p-4 shadow-sm">
+            <h3 className="text-[#666] font-semibold mb-3">Current PLU List</h3>
             <div className="max-h-96 overflow-y-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="text-[#EDEAE1]/70 text-left border-b border-[#16205B] sticky top-0 bg-[#1E1E1E]">
+                  <tr className="text-[#666] text-left border-b-2 border-[#EDEAE1] sticky top-0 bg-white">
                     <th className="pb-2">PLU</th>
                     <th className="pb-2">Product</th>
                     <th className="pb-2">Category</th>
@@ -1299,19 +1293,19 @@ const AdminDashboard = ({ onBack, pluList, setPluList, showNotification }) => {
                 </thead>
                 <tbody>
                   {pluList.slice(0, 50).map(item => (
-                    <tr key={item.plu} className="border-b border-[#16205B]/50">
-                      <td className="py-2 text-[#EB6619]">{item.plu}</td>
+                    <tr key={item.plu} className="border-b border-[#EDEAE1]">
+                      <td className="py-2 text-[#590129] font-medium">{item.plu}</td>
                       <td className="py-2">{item.product_name}</td>
-                      <td className="py-2 text-[#EDEAE1]/70">{item.category}</td>
+                      <td className="py-2 text-[#666]">{item.category}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
               {pluList.length === 0 && (
-                <div className="text-center py-8 text-[#EDEAE1]/50">No PLU list loaded</div>
+                <div className="text-center py-8 text-[#666]">No PLU list loaded</div>
               )}
               {pluList.length > 50 && (
-                <div className="text-center py-4 text-[#EDEAE1]/50">Showing first 50 of {pluList.length} products</div>
+                <div className="text-center py-4 text-[#666]">Showing first 50 of {pluList.length} products</div>
               )}
             </div>
           </div>
@@ -1321,15 +1315,15 @@ const AdminDashboard = ({ onBack, pluList, setPluList, showNotification }) => {
       {/* Users Section */}
       {activeSection === 'users' && (
         <div className="p-4 space-y-4">
-          <div className="bg-[#1E1E1E] rounded-xl p-4">
-            <h3 className="text-[#C0946F] font-medium mb-3">➕ Add New User</h3>
+          <div className="bg-white rounded-xl p-4 shadow-sm">
+            <h3 className="text-[#C0946F] font-semibold mb-3">➕ Add New User</h3>
             <div className="space-y-3">
               <input
                 type="text"
                 value={newUsername}
                 onChange={(e) => setNewUsername(e.target.value)}
                 placeholder="Username"
-                className="w-full bg-[#16205B] border border-[#16205B] rounded-lg px-4 py-2 text-sm"
+                className="w-full bg-[#EDEAE1] border-2 border-[#C0946F] rounded-lg px-4 py-2 text-sm"
                 autoCapitalize="none"
               />
               <input
@@ -1337,33 +1331,33 @@ const AdminDashboard = ({ onBack, pluList, setPluList, showNotification }) => {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 placeholder="Password"
-                className="w-full bg-[#16205B] border border-[#16205B] rounded-lg px-4 py-2 text-sm"
+                className="w-full bg-[#EDEAE1] border-2 border-[#C0946F] rounded-lg px-4 py-2 text-sm"
               />
               <select
                 value={newRole}
                 onChange={(e) => setNewRole(e.target.value)}
-                className="w-full bg-[#16205B] border border-[#16205B] rounded-lg px-4 py-2 text-sm"
+                className="w-full bg-[#EDEAE1] border-2 border-[#C0946F] rounded-lg px-4 py-2 text-sm"
               >
                 <option value="butcher">Butcher</option>
                 <option value="admin">Admin</option>
               </select>
               <button
                 onClick={addUser}
-                className="w-full bg-[#EB6619] hover:bg-[#EB6619]/90 py-2 rounded-lg text-sm font-medium"
+                className="w-full bg-[#590129] hover:bg-[#590129]/90 py-2 rounded-lg text-sm font-medium text-white"
               >
                 Add User
               </button>
             </div>
           </div>
 
-          <div className="bg-[#1E1E1E] rounded-xl p-4">
-            <h3 className="text-[#EDEAE1]/70 font-medium mb-3">👥 Current Users</h3>
+          <div className="bg-white rounded-xl p-4 shadow-sm">
+            <h3 className="text-[#666] font-semibold mb-3">👥 Current Users</h3>
             <div className="space-y-2">
               {users.map(u => (
-                <div key={u.id} className="flex justify-between items-center bg-[#16205B]/50 rounded-lg p-3">
+                <div key={u.id} className="flex justify-between items-center bg-[#EDEAE1] rounded-lg p-3">
                   <div>
-                    <div className="font-medium">{u.username}</div>
-                    <div className="text-xs text-[#EDEAE1]/70">{u.role}</div>
+                    <div className="font-medium text-[#1a1a1a]">{u.username}</div>
+                    <div className="text-xs text-[#666]">{u.role}</div>
                   </div>
                   {u.username !== 'admin' && (
                     <button
@@ -1392,7 +1386,6 @@ export default function App() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [offlineQueueCount, setOfflineQueueCount] = useState(0);
 
-  // Check for saved session
   useEffect(() => {
     const savedUser = localStorage.getItem('mfs_user');
     if (savedUser) {
@@ -1402,7 +1395,6 @@ export default function App() {
     loadPluList();
   }, []);
 
-  // Online/Offline detection
   useEffect(() => {
     const handleOnline = () => {
       setIsOnline(true);
@@ -1413,7 +1405,6 @@ export default function App() {
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
     
-    // Check queue periodically
     const interval = setInterval(() => {
       setOfflineQueueCount(getOfflineQueue().length);
       if (navigator.onLine && getOfflineQueue().length > 0) {
@@ -1441,7 +1432,7 @@ export default function App() {
         }
       } catch (error) {
         console.error('Error syncing:', error);
-        return; // Stop if error
+        return;
       }
     }
     
@@ -1471,7 +1462,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#16205B]">
+    <div className="min-h-screen bg-[#EDEAE1]">
       {notification && (
         <Notification
           message={notification.message}
@@ -1499,7 +1490,6 @@ export default function App() {
           showNotification={showNotification}
           user={user}
           isOnline={isOnline}
-          syncOfflineQueue={syncOfflineQueue}
         />
       )}
 
