@@ -86,17 +86,28 @@ const parseCarcassBarcode = (barcode) => {
   
   try {
     const dateStr = cleaned.substring(3, 11);
-    const year = dateStr.substring(0, 4);
-    const month = dateStr.substring(4, 6);
-    const day = dateStr.substring(6, 8);
+    const year = parseInt(dateStr.substring(0, 4), 10);
+    const month = parseInt(dateStr.substring(4, 6), 10);
+    const day = parseInt(dateStr.substring(6, 8), 10);
     const killNumber = cleaned.substring(11, 15);
     
+    // Validate month and day ranges
+    if (month < 1 || month > 12) return null;
+    if (day < 1 || day > 31) return null;
+    
+    // Validate actual date
     const dateObj = new Date(year, month - 1, day);
     if (isNaN(dateObj.getTime())) return null;
     
+    // Check if date rolled over (e.g., Feb 30 becomes Mar 2)
+    if (dateObj.getMonth() + 1 !== month || dateObj.getDate() !== day) return null;
+    
+    const monthStr = month.toString().padStart(2, '0');
+    const dayStr = day.toString().padStart(2, '0');
+    
     return {
-      killDate: `${year}-${month}-${day}`,
-      killDateDisplay: `${day}/${month}/${year}`,
+      killDate: `${year}-${monthStr}-${dayStr}`,
+      killDateDisplay: `${dayStr}/${monthStr}/${year}`,
       killNumber: killNumber,
       rawBarcode: cleaned
     };
