@@ -1,6 +1,13 @@
-# MFS Inventory Tracker
+# MFS Inventory Tracker v2
 
 Process Room Scanning System for MFS Global LTD.
+
+## New in v2
+
+- **🔐 User Login** - Secure access with username/password
+- **🔊 Sound Feedback** - Audio confirmation on successful scans
+- **📴 Offline Mode** - Queue scans when WiFi drops, auto-sync when back online
+- **↩️ Undo Last Scan** - Quick button to remove the last entry
 
 ## Features
 
@@ -10,11 +17,22 @@ Process Room Scanning System for MFS Global LTD.
 
 - **Beef & Poultry** (Coming Soon)
 
-- **Admin Dashboard**
+- **Admin Dashboard** (Admin users only)
   - View reports with date filtering
   - Export to CSV
   - Upload PLU list from MXi Pro
   - Yield calculations
+  - User management (add/remove users)
+
+## Default Users
+
+| Username | Password | Role |
+|----------|----------|------|
+| admin | mfs2026 | Admin |
+| butcher1 | lamb123 | Butcher |
+| butcher2 | lamb123 | Butcher |
+
+**⚠️ Change these passwords in production!**
 
 ## Tech Stack
 
@@ -23,47 +41,71 @@ Process Room Scanning System for MFS Global LTD.
 - Supabase (PostgreSQL database)
 - Vercel (hosting)
 
-## Deployment to Vercel
+## Deployment
 
-### Option 1: GitHub (Recommended)
+### Update Existing Deployment
 
-1. Create a GitHub repository
-2. Push this code to the repository:
+1. Replace the files in your local repository with these new files
+2. Commit and push:
    ```bash
-   git init
    git add .
-   git commit -m "Initial commit"
-   git remote add origin https://github.com/YOUR-USERNAME/mfs-inventory-tracker.git
-   git push -u origin main
+   git commit -m "Add login, sound, offline mode, undo features"
+   git push
    ```
+3. Vercel will auto-deploy
 
-3. Go to [vercel.com](https://vercel.com)
-4. Sign up / Log in with GitHub
-5. Click "New Project"
-6. Import your GitHub repository
-7. Click "Deploy"
-8. Done! Your app will be live at `https://your-project.vercel.app`
+### Fresh Deployment
 
-### Option 2: Vercel CLI
+1. Push to GitHub
+2. Import to Vercel
+3. Deploy
 
-1. Install Vercel CLI:
-   ```bash
-   npm install -g vercel
-   ```
+## Database Tables Required
 
-2. Run in the project directory:
-   ```bash
-   vercel
-   ```
+Run this SQL in Supabase if not already done:
 
-3. Follow the prompts
+```sql
+-- Users table
+CREATE TABLE users (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  username TEXT UNIQUE NOT NULL,
+  password TEXT NOT NULL,
+  role TEXT DEFAULT 'butcher',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
 
-## Local Development
+ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Allow all" ON users FOR ALL USING (true);
 
-```bash
-npm install
-npm run dev
+-- Default users
+INSERT INTO users (username, password, role) VALUES 
+  ('admin', 'mfs2026', 'admin'),
+  ('butcher1', 'lamb123', 'butcher'),
+  ('butcher2', 'lamb123', 'butcher');
 ```
+
+## User Roles
+
+| Role | Access |
+|------|--------|
+| **admin** | Full access - scanning, reports, user management, PLU upload |
+| **butcher** | Scanning only - Goods In and Goods Produced |
+
+## Offline Mode
+
+When WiFi drops:
+- Scans are saved locally in browser storage
+- Yellow "Offline" indicator appears
+- When back online, data auto-syncs to database
+- Pending items show "⏳ Pending sync" label
+
+## Sound Feedback
+
+- ✅ **Success beep** - Barcode parsed correctly
+- ❌ **Error beep** - Barcode could not be parsed
+- 🗑️ **Delete beep** - Entry deleted
+
+Also vibrates on mobile devices if supported.
 
 ## Barcode Formats
 
@@ -79,14 +121,8 @@ Format: `26PPPPVWWWWWC`
 - 26 = Prefix
 - PPPP = PLU (4 digits)
 - V = Verifier
-- WWWWW = Weight (5 digits, divide by 1000 for kg)
+- WWWWW = Weight (divide by 1000 for kg)
 - C = Checksum
-
-## Avery Berkel Configuration
-
-Change barcode format to **ID 14**:
-1. System Setup > Configuration > Barcode Configuration
-2. Set "Add Label Single Item Barcode Format" to ID 14
 
 ## Support
 
