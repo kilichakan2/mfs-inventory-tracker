@@ -151,6 +151,32 @@ const Notification = ({ message, type, onClose }) => {
   );
 };
 
+// Delete Confirmation Modal
+const DeleteConfirmModal = ({ message, onConfirm, onCancel }) => {
+  return (
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+      <div className="bg-[#1f2937] border border-[#374151] rounded-xl p-6 max-w-sm w-full">
+        <h3 className="text-lg font-semibold text-[#f3f4f6] mb-2">Confirm Delete</h3>
+        <p className="text-[#9ca3af] mb-6">{message}</p>
+        <div className="flex gap-3">
+          <button
+            onClick={onCancel}
+            className="flex-1 bg-[#374151] hover:bg-[#4b5563] text-[#f3f4f6] py-3 rounded-lg font-medium transition-colors"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            className="flex-1 bg-[#f87171] hover:bg-[#ef4444] text-white py-3 rounded-lg font-medium transition-colors"
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Online Status Indicator
 const OnlineStatus = ({ isOnline, queueCount }) => {
   if (isOnline && queueCount === 0) return null;
@@ -363,6 +389,7 @@ const ProductModule = ({ productType, productEmoji, onBack, pluList, showNotific
   const [goodsProduced, setGoodsProduced] = useState([]);
   const [loading, setLoading] = useState(true);
   const [lastEntry, setLastEntry] = useState(null);
+  const [deleteConfirm, setDeleteConfirm] = useState(null);
   
   const [carcassBarcode, setCarcassBarcode] = useState('');
   const [carcassWeight, setCarcassWeight] = useState('');
@@ -475,6 +502,40 @@ const ProductModule = ({ productType, productEmoji, onBack, pluList, showNotific
     playSound('delete'); showNotification('Last entry undone'); setLastEntry(null);
   };
 
+  const confirmDeleteGoodsIn = (item) => {
+    setDeleteConfirm({
+      type: 'goodsIn',
+      id: item.id,
+      message: `Delete Kill #${item.kill_number} (${item.weight_kg}kg)?`
+    });
+  };
+
+  const confirmDeleteGoodsProduced = (item) => {
+    setDeleteConfirm({
+      type: 'goodsProduced',
+      id: item.id,
+      message: `Delete ${item.product_name} (${parseFloat(item.weight_kg).toFixed(3)}kg)?`
+    });
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!deleteConfirm) return;
+    
+    if (deleteConfirm.type === 'goodsIn') {
+      if (deleteConfirm.id.toString().startsWith('offline_')) { setGoodsIn(goodsIn.filter(item => item.id !== deleteConfirm.id)); }
+      else { await supabase.from('goods_in').delete().eq('id', deleteConfirm.id); setGoodsIn(goodsIn.filter(item => item.id !== deleteConfirm.id)); }
+      if (lastEntry?.data?.id === deleteConfirm.id) setLastEntry(null);
+    } else {
+      if (deleteConfirm.id.toString().startsWith('offline_')) { setGoodsProduced(goodsProduced.filter(item => item.id !== deleteConfirm.id)); }
+      else { await supabase.from('goods_produced').delete().eq('id', deleteConfirm.id); setGoodsProduced(goodsProduced.filter(item => item.id !== deleteConfirm.id)); }
+      if (lastEntry?.data?.id === deleteConfirm.id) setLastEntry(null);
+    }
+    
+    playSound('delete');
+    showNotification('Entry deleted');
+    setDeleteConfirm(null);
+  };
+
   const deleteGoodsIn = async (id) => {
     if (id.toString().startsWith('offline_')) { setGoodsIn(goodsIn.filter(item => item.id !== id)); }
     else { await supabase.from('goods_in').delete().eq('id', id); setGoodsIn(goodsIn.filter(item => item.id !== id)); }
@@ -496,6 +557,13 @@ const ProductModule = ({ productType, productEmoji, onBack, pluList, showNotific
 
   return (
     <div className="min-h-screen bg-[#111827] text-[#f3f4f6] pb-20">
+      {deleteConfirm && (
+        <DeleteConfirmModal
+          message={deleteConfirm.message}
+          onConfirm={handleDeleteConfirm}
+          onCancel={() => setDeleteConfirm(null)}
+        />
+      )}
       <div className="bg-[#1f2937] px-4 py-3 border-b border-[#374151]">
         <div className="max-w-lg mx-auto">
           <button onClick={onBack} className="text-[#9ca3af] text-sm mb-2 flex items-center gap-1 hover:text-[#14b8a6]">← Back</button>
@@ -551,7 +619,7 @@ const ProductModule = ({ productType, productEmoji, onBack, pluList, showNotific
                       <div className="font-semibold">Kill #{item.kill_number}{item.id.toString().startsWith('offline_') && <span className="ml-2 text-xs text-[#fbbf24]">⏳</span>}</div>
                       <div className="text-sm text-[#9ca3af]">{formatDate(item.kill_date)} • {item.weight_kg}kg • {formatTime(item.scanned_at)}</div>
                     </div>
-                    <button onClick={() => deleteGoodsIn(item.id)} className="text-[#f87171] hover:text-[#ef4444] p-2">✕</button>
+                    <button onClick={() => confirmDeleteGoodsIn(item)} className="text-[#f87171] hover:text-[#ef4444] p-2">✕</button>
                   </div>
                 ))}
                 {goodsIn.length === 0 && <div className="text-[#9ca3af] text-center py-8 bg-[#1f2937] border border-[#374151] rounded-lg">No entries yet today</div>}
@@ -597,7 +665,7 @@ const ProductModule = ({ productType, productEmoji, onBack, pluList, showNotific
                       <div className="font-semibold">{item.product_name}{item.id.toString().startsWith('offline_') && <span className="ml-2 text-xs text-[#fbbf24]">⏳</span>}</div>
                       <div className="text-sm text-[#9ca3af]">{parseFloat(item.weight_kg).toFixed(3)}kg • PLU {item.plu} • {formatTime(item.scanned_at)}</div>
                     </div>
-                    <button onClick={() => deleteGoodsProduced(item.id)} className="text-[#f87171] hover:text-[#ef4444] p-2">✕</button>
+                    <button onClick={() => confirmDeleteGoodsProduced(item)} className="text-[#f87171] hover:text-[#ef4444] p-2">✕</button>
                   </div>
                 ))}
                 {goodsProduced.length === 0 && <div className="text-[#9ca3af] text-center py-8 bg-[#1f2937] border border-[#374151] rounded-lg">No entries yet today</div>}
